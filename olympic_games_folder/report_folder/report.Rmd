@@ -6,7 +6,6 @@ header-includes:
    - \usepackage{booktabs}
 output:
   pdf_document: default
-  html_document: default
 ---
 # Analysis of olympic games
 
@@ -24,21 +23,21 @@ ls ../data_folder/
 ```
 **1.** So we have 11 .csv files, that have to unite in one table. Let's load the needed libraries:
 ```{r message=FALSE}
-#if (!require(x, character.only = TRUE)) {
-#      install.packages(x, dependencies = TRUE)
-#      library(x, character.only = TRUE)
-#    }
-library(dplyr)
-library(ggplot2)
-library(ggExtra)
-library(cowplot)
-library(car)
-library(broomExtra)
-library(purrr)
+packages <- c("ggplot2", "dplyr", "ggExtra", "cowplot", "car", "broomExtra", "purrr", "stringr")
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
+
 
 ```
 Uniting all data in one datafram *df_ol*:
-```{r}
+```{r, warning=FALSE}
 uniting_data <- function(path, extension = "csv"){
   pattern <- paste0("*.", extension)
   myfiles <-  paste0(path, list.files(path, pattern=pattern, all.files=FALSE,
@@ -58,7 +57,7 @@ unique(df_ol$Season)
 unique(df_ol$Medal)
 ```
 It's obvious, that instead of *NA* empty string *""* has sometimes been used to showcase the lacking data. Let's reload our data with correct parameters:
-```{r}
+```{r, warning=FALSE}
 uniting_data <- function(path, extension = "csv", na = "NA"){
   pattern <- paste0("*.", extension)
   myfiles <-  paste0(path, list.files(path, pattern=pattern, all.files=FALSE,
@@ -70,7 +69,7 @@ df_ol <- uniting_data("../data_folder/", "csv", na = c("", "NA"))
 ```
 
 Let's factor our data, "G" has been changed to "M" based on the names of the participants and the events they participated in:
-```{r}
+```{r, warning=FALSE}
 unique(df_ol$Sex)
 df_ol <- df_ol %>% mutate(Sex=replace(Sex, Sex == "G", "M")) #df_ol[which(df_ol$Sex == "G"),] <- "M"
 
@@ -80,13 +79,13 @@ df_ol$Season <- factor(df_ol$Season)
 df_ol$Medal <- factor(df_ol$Medal)
 ```
 Let's check some other parameters starting with Sport column. There seems to be an typo with football - "Footba" instead of "Football".
-```{r}
+```{r, warning=FALSE}
 unique(df_ol$Sport)
 df_ol <- df_ol %>% mutate(Sport=replace(Sport, Sport == "Footba", "Football")) 
 unique(df_ol$Sport)
 ```
 Let's check our weight, age and height distributions.
-```{r}
+```{r, warning=FALSE}
 max(df_ol$Weight, na.rm = T)
 min(df_ol$Weight, na.rm = T)
 
@@ -104,12 +103,12 @@ ggplot(subset(df_ol, complete.cases(Sex)), aes(x=Sex, y = Weight, fill = Sex))+
 
 ```
 We have a weird outlier with the weight of less than 25. We have Helmut Lehmann, who doesn't really contribute anything except for his age and height - no other parameters are known. Let's just filter him off.
-```{r}
+```{r, warning=FALSE}
 df_ol[which(df_ol$Weight < 25),]
 df_ol <- df_ol[-c(which(df_ol$Weight < 25)),]
 ```
 Let's do the same with age and height. We have a very tall female, with height of 340 which is impossible, and a male of age 240. Let's check whether that woman might have participated in other events as well and substitute her height accordingly. Same goes for the age.
-```{r}
+```{r, warning=FALSE}
 ggplot(subset(df_ol, complete.cases(Sex)), aes(x=Sex, y = Height, fill = Sex))+
   geom_boxplot()+
   scale_fill_brewer(palette="RdBu") + 
@@ -153,11 +152,11 @@ df_ol <- df_ol %>%  mutate(Age=replace(Age, Age == 240, 24))
 
 ```
 **3.** The age of two youngest athletes of each sex on Olympics in year 1992:
-```{r}
+```{r, warning=FALSE}
 df_ol %>% filter(Year == 1992) %>% arrange(Age) %>% group_by(Sex) %>% slice(c(1)) %>% select(Age)
 ```
 **4. ** Calculate mean and standard deviation for **height**, each sex:
-```{r}
+```{r, warning=FALSE}
 
 aggregate(df_ol$Height, by = list(df_ol$Sex) , FUN = function(x) cbind(mean(x, na.rm = T), sd(x, na.rm = T)))
 
@@ -174,7 +173,7 @@ df_ol %>% filter(is.na(Sex) == F) %>% group_by(Sex) %>%
 
 ```
 **5. ** Mean and standard deviation of **height** for female tennis players on 2000 Olympics. Round to 1 digit after decimal.
-```{r}
+```{r, warning=FALSE}
 df_ol %>% filter(Sex %in% "F", Year %in% 2000) %>% 
   summarize(
     mean = round(mean(Height, na.rm = TRUE), 1),  sd = round(sd(Height, na.rm = T), 1)
@@ -182,7 +181,7 @@ df_ol %>% filter(Sex %in% "F", Year %in% 2000) %>%
 ```
 
 **6. **In which category of sport did the heaviest athlete of 2006 Olympics participate?
-```{r}
+```{r, warning=FALSE}
 df_ol %>% filter(Year %in% 2006) %>% 
   arrange(-Weight) %>% 
   slice(1) %>% 
@@ -190,7 +189,7 @@ df_ol %>% filter(Year %in% 2006) %>%
 ```
 
 **7. **How many gold medals obtained by females from 1980 till 2010 (both inclusive)?
-```{r}
+```{r, warning=FALSE}
 df_ol %>% filter(Sex %in% "F", Year %in% (1980:2010), Medal %in% "Gold") %>% summarize( n = n()) 
   
 ```
@@ -233,7 +232,7 @@ df_ol_num_sports_02_94$n[2] - df_ol_num_sports_02_94$n[1]
 
 ```
 **11. **What are the top 3 countries for each Olympics season and medal? 
-```{r}
+```{r, warning=FALSE}
 df_ol %>% filter(is.na(Medal) == F) %>% 
   group_by(Season, Medal, NOC) %>% 
   summarize(n = n()) %>% 
@@ -249,7 +248,7 @@ df_ol %>% filter(is.na(Medal) == F) %>%
 
 ```
 **12. **Put standardized height values into a new column *Height_z_scores*:
-```{r}
+```{r, warning=FALSE}
 df_ol_z <- df_ol %>% 
   mutate(Height_z_scores = (Height - mean(Height, na.rm =T))/sd(Height, na.rm = T))
 
@@ -257,19 +256,19 @@ head(scale(df_ol$Height))
 df_ol_scale <- df_ol %>% mutate(Height_scaled = scale(Height))
 ```
 **13. **Put standardized height values into a new column *Height_min_max_scores* (min-max normalization, every value in [0,1]):
-```{r}
+```{r, warning=FALSE}
 df_ol_z_minmax <- df_ol_z %>% 
   mutate(Height_min_max_scaled = (Height - min(Height, na.rm =T))/(max(Height, na.rm = T)-min(Height, na.rm =T)))
 ```
 **14. **Height, weight and age of male and female athletes, that participated in winter Olympics. As these variables are continuous, we could theoriticaly compare them by t-test. For this purpose, we first have to test for normal distribution.
-```{r}
+```{r, warning=FALSE}
 #General statistics:
 df_ol %>% filter(Season %in% "Winter") %>% 
   group_by(Sex) %>% 
   summarize(across(.cols = c(Height, Weight, Age), list(mean = ~ round(mean(x = ., na.rm = T), 2), sd = ~ round(sd(x = ., na.rm = T), 2))))
 ```
 Let's take a look at weight first. The data is normally distributed as seen on QQplot and the density distribution, so we can use the t-test.
-```{r}
+```{r, warning=FALSE}
 #Testing for normal distribution
 ggplot(subset(df_ol, complete.cases(Sex)), aes(Weight, fill = Sex))+
   geom_density(alpha = 0.5)+
@@ -297,7 +296,7 @@ The weight distribution of females and males participating in Olympic games were
 
 
 Now let's do the same for height:
-```{r}
+```{r, warning=FALSE}
 #Testing for normal distribution
 ggplot(subset(df_ol, complete.cases(Sex)), aes(Height, fill = Sex))+
   geom_density(alpha = 0.5)+
@@ -326,7 +325,7 @@ The height distribution of females and males participating in Olympic games were
 
 Now let's do the same for age. Age is not a continuous variable and is not normally distributed, however the sample size is very large which is why t-test might still be a choice. Mann Whitney U Test was also run.
 
-```{r}
+```{r, warning=FALSE}
 #Testing for normal distribution
 ggplot(subset(df_ol, complete.cases(Sex)), aes(Age, fill = Sex))+
   geom_density(alpha = 0.5)+
@@ -375,22 +374,8 @@ Age & $-97.81495$  & $0$ & $150732.7$           & Welch Two Sample t-test & Two 
 
 **15. ** Relationship between Team and Medal.
 
-```{r}
-# df_medals <- df_ol %>% group_by(Team) %>% 
-#   select(Medal, Team) %>% 
-#   summarize(n_medals = n()) # %>% 
-# #  arrange(-n) %>% 
-# #  slice(1:3) %>% 
-# # summarise_all(~paste(., collapse = '; '))
-# df_part <- df_ol %>% group_by(Team) %>% 
-#   select(Team) %>% 
-#   summarize(n_participants = n())
-# df_together <- cbind(df_medals, df_part[, 2]) %>% summarize(fraction = n_medals/n_participants)
-# 
-# 
-# df_medals <- df_ol %>% group_by(NOC) %>% 
-#   select(Medal, NOC) %>% 
-#   summarize(n_medals = n())
+```{r, warning=FALSE}
+
 
 
 df_fract_Team <- df_ol %>% mutate(ex_medal = ifelse(!is.na(Medal), 1, 0)) %>% 
@@ -403,7 +388,7 @@ df_fract_Team <- df_ol %>% mutate(ex_medal = ifelse(!is.na(Medal), 1, 0)) %>%
 
 ggplot(df_fract_Team, aes(x = n_part, y = fraction_med_part, group =n_medals))+
   geom_point(aes(fill=n_medals, size=n_medals), shape = 21, alpha = 0.7)+
-  geom_text(aes(label=ifelse(n_part > 2500, as.character(Team),'')),hjust=0.5,vjust=-0.5)+
+  geom_text(aes(label=ifelse(n_part > 2500, as.character(Team),'')),hjust=0.5,vjust=-1.2, size = 2)+
   scale_fill_viridis_c(guide = "legend") +
   scale_size_continuous(range = c(1, 5))
 
@@ -420,7 +405,7 @@ df_fract_NOC <- df_ol %>% mutate(ex_medal = ifelse(!is.na(Medal), 1, 0)) %>%
 
 ggplot(df_fract_NOC, aes(x = n_part, y = fraction_med_part, group =n_medals))+
   geom_point(aes(fill=n_medals, size=n_medals), shape = 21, alpha = 0.7)+
-  geom_text(aes(label=ifelse(fraction_med_part>0.2 | n_part > 2000, as.character(NOC),'')),hjust=0.3,vjust=-0.7)+
+  geom_text(aes(label=ifelse(fraction_med_part>0.2 | n_part > 2000, as.character(NOC),'')),hjust=0.3,vjust=-1.2, size=2)+
   scale_fill_viridis_c(guide = "legend") +
   scale_size_continuous(range = c(1, 5))
 
@@ -428,11 +413,11 @@ ggplot(df_fract_NOC, aes(x = n_part, y = fraction_med_part, group =n_medals))+
 
 ```
 
-**16. ** Compare some statistics. 
+**16. ** Compare some statistics - be creative!
 
 
-Is the mean height of sportswomen competing in gymnastics, different from the height of male competing in basketball? Hmmmmm...
-```{r}
+*Is the mean height of sportswomen competing in gymnastics, different from the height of male competing in basketball?* Hmmmmm...
+```{r, warning=FALSE}
 #Testing for normal distribution
 fem_gym <- df_ol %>% 
   filter(Sex %in% c("F"), Sport %in% c("Gymnastics"))
@@ -472,10 +457,11 @@ t_gym_bask
 
 ```
 You're not going to believe this!!!
+
 The height distribution of female gymnasts and males basketball players participating in Olympic games differ! As the height was normally distributed, two-sided Welch Two Sample t-test was used and significant difference was discovered, with test statistic equal to `r t_gym_bask$"Statistic"` and p-Value of `r t_gym_bask$"P Value"`.
 
-Is weight and height correlated? How does the correlation differ between Sexes? Hmmmm...
-```{r, warning=False}
+*Is weight and height correlated?* How does the correlation differ between Sexes? Hmmmm...
+```{r, warning=FALSE}
 #Let's see... We know that Height and Weight are both normally distributed.
 ggplot(subset(df_ol, complete.cases(Height, Weight)), aes(Weight, Height))+
   geom_point(aes(color = Sex), size = 0.1)+
@@ -484,8 +470,10 @@ ggplot(subset(df_ol, complete.cases(Height, Weight)), aes(Weight, Height))+
               size=0.5, 
               method = 'lm')
 
+
 fem <- filter(df_ol, df_ol$Sex %in% c("F"))
 m <- filter(df_ol, df_ol$Sex %in% c("M"))
+
 
 c_m <- cor.test(m$Weight, m$Height)
 c_fem <- cor.test(fem$Weight, fem$Height)
@@ -506,6 +494,122 @@ c_fem
 ```
 Correlation coefficient estimate for males is `r c_m$"Correlation coefficient estimate"` with lower confidence interval of `r c_m$"Lower conf.int."` and upper confidence interval of `r c_m$"Upper conf.int."`. For females coefficient estimate for males is `r c_fem$"Correlation coefficient estimate"` with lower confidence interval of `r c_fem$"Lower conf.int."` and upper confidence interval of `r c_fem$"Upper conf.int."`. For both sexes there is positive correlation between height and weight, however for women it seems to be a little bit more pronounced.
 
-.7269577
 
-Do people get fatter when they age? Let's compare age and weight for corresponding ages.
+*Do people get fatter when they age?* Let's compare age and weight for corresponding ages. There are some people that participated in the Olympics many times, and might skew the data a little bit - but due to the fact that the sample size is very large and the number of these people is not as high, we can not filter them off.
+```{r, warning=FALSE}
+#Let's see... We know that Age is (nearly) normally distributed and weight is normally distributed.
+ggplot(subset(df_ol, complete.cases(Age, Weight)), aes(Age, Weight))+
+  geom_point(aes(color = Sex), size = 0.1)+
+  geom_smooth(aes(linetype=Sex, color=Sex),
+              color = "black",
+              size=0.5, 
+              method = 'lm')
+
+fem <- filter(df_ol, df_ol$Sex %in% c("F"))
+m <- filter(df_ol, df_ol$Sex %in% c("M"))
+
+c_m_age <- cor.test(m$Weight, m$Age)
+c_fem_age <- cor.test(fem$Weight, fem$Age)
+
+c_m_age <- tidy(c_m_age)[c("estimate", "statistic", "p.value", 
+                 "conf.low", "conf.high", "method", "alternative")]
+names(c_m_age) <- c("Correlation coefficient estimate", "Statistic", "P value",
+               "Lower conf.int.", "Upper conf.int.", "Method", "Alternative Hypothesis")
+c_m_age
+
+c_fem_age <- tidy(c_fem_age)[c("estimate", "statistic", "p.value", 
+                 "conf.low", "conf.high", "method", "alternative")]
+names(c_fem_age) <- c("Correlation coefficient estimate", "Statistic", "P value",
+               "Lower conf.int.", "Upper conf.int.", "Method", "Alternative Hypothesis")
+c_fem_age
+
+
+```
+There is positive correlation between age and weight for both females and males, however surprisingly this correlation is much higher for females. Correlation coefficient estimate for males is `r c_m_age$"Correlation coefficient estimate"` with lower confidence interval of `r c_m_age$"Lower conf.int."` and upper confidence interval of `r c_m_age$"Upper conf.int."`. For females coefficient estimate for males is `r c_fem_age$"Correlation coefficient estimate"` with lower confidence interval of `r c_fem_age$"Lower conf.int."` and upper confidence interval of `r c_fem_age$"Upper conf.int."`. For both sexes there is positive correlation between height and weight, however for women it seems to be a little bit more pronounced. This might be explained with some female-popular sports, like gymnastics, that require lower weight and height and is primarily represented by younger sportswomen.
+
+*Did gymnasts get bulkier in this century?* Let's group the gymnasts from last century (80s and 90s) and this one, and take a look at their BMI (formula from https://www.cdc.gov/nccdphp/dnpao/growthcharts/training/bmiage/page5_1.html).
+```{r, warning=FALSE}
+df_ol_bmi <- df_ol %>%  
+  mutate(Year_category = case_when(Year >= 1980  & Year < 2000 ~ '1980-1999',
+                           Year >= 2000  & Year <= 2020 ~ '2000-2020',)) %>% 
+  filter(Sex %in% c("F"), Sport %in% c("Gymnastics"), complete.cases(Year_category)) %>% 
+  mutate(bmi = Weight/Height^2*10000)
+
+df_ol_bmi$Year_category <- factor(df_ol_bmi$Year_category)
+str(df_ol_bmi)
+
+#Density distribution of bmi for the year categories
+ggplot(df_ol_bmi, aes(x = bmi, fill = Year_category))+
+  geom_density(alpha = 0.4) + 
+  labs(title = "BMI correlation", subtitle = "For female gymnasts in different decades") + 
+  theme_bw()+
+  scale_fill_discrete(name = "Year categories")
+
+#It is quite evident that the range of BMI has gotten larger and on higher end:
+ggplot(df_ol_bmi, aes(y = bmi, fill = Year_category))+
+  geom_boxplot(alpha = 0.4) + 
+  labs(title = "BMI correlation", subtitle = "For female gymnasts in different decades") + 
+  theme_bw()+
+  scale_fill_discrete(name = "Year categories")
+
+#QQPlot
+qqPlot(df_ol_bmi[which(df_ol_bmi$Year_category == "1980-1999"), ]$bmi)
+qqPlot(df_ol_bmi[which(df_ol_bmi$Year_category == "2000-2020"), ]$bmi)
+
+
+#Checking for normal distribution:
+shapiro.test(df_ol_bmi[which(df_ol_bmi$Year_category == "1980-1999"), ]$bmi)
+shapiro.test(df_ol_bmi[which(df_ol_bmi$Year_category == "2000-2020"), ]$bmi)
+
+#More or less normal distribution - let's do t-test
+t_bmi <- t.test(df_ol_bmi[which(df_ol_bmi$Year_category == "1980-1999"), ]$bmi, df_ol_bmi[which(df_ol_bmi$Year_category == "2000-2020"), ]$bmi)
+t_bmi <- tidy(t_bmi)[c("statistic", "p.value", "parameter", "method", "alternative")]
+names(t_bmi) <- c("Statistic", "P Value", "Degrees of Freedom", "Method", "Alternative Hypothesis")
+t_bmi
+
+
+```
+As we can see there is significant difference between the BMIs of female gymnasts from 80s and 90s in comparison to the ones from this century. This confirms the alternative hypothesis that the gymnasts might have gotten "bulkier" on average - **DISCLAIMER** this enables sportswomen perform more complicated tricks and ensures more safety.
+
+
+*Lucky numbers - is the occurence of 6s or 7s in IDs maybe correlated with success/failure?*
+
+```{r, warning=FALSE}
+df_ol$number.of.6 <- str_count(df_ol$ID, "6")
+df_ol$number.of.6 <- factor(df_ol$number.of.6)
+df_ol_success6 <- df_ol %>% mutate(ex_medal = ifelse(!is.na(Medal), 1, 0)) %>% 
+  group_by(number.of.6) %>% 
+  select(number.of.6, ex_medal) %>% 
+  summarize(n_medals = sum(ex_medal),
+            n_part = n(), 
+            fraction_part_medals = sum(ex_medal)/n()) 
+
+ggplot(df_ol_success6, aes(x = number.of.6, y = fraction_part_medals, group = n_medals)) + 
+  geom_point(aes(fill=n_medals, size=n_medals), shape = 21, alpha = 0.7) +
+  scale_fill_viridis_c(guide = "legend")+
+  scale_size_continuous(range = c(1, 5))
+
+
+
+df_ol$number.of.7 <- str_count(df_ol$ID, "7")
+df_ol$number.of.7 <- factor(df_ol$number.of.7)
+df_ol_success7 <- df_ol %>% mutate(ex_medal = ifelse(!is.na(Medal), 1, 0)) %>% 
+  group_by(number.of.7) %>% 
+  select(number.of.7, ex_medal) %>% 
+  summarize(n_medals = sum(ex_medal),
+            n_part = n(), 
+            fraction_part_medals = sum(ex_medal)/n()) 
+
+ggplot(df_ol_success7, aes(x = number.of.7, y = fraction_part_medals, group = n_medals)) + 
+  geom_point(aes(fill=n_medals, size=n_medals), shape = 21, alpha = 0.7) +
+  scale_fill_viridis_c(guide = "legend")+
+  scale_size_continuous(range = c(1, 5)) 
+
+#We have 2 people with all 6 and 7s, which is why we have such hard outliers for the last points.
+df_ol[which(df_ol$number.of.6 == 5 | df_ol$number.of.7 == 5),]
+
+
+
+```
+
+The graph for 7a doesn't really look that bad. We can see that the ratio of 7s to the total participants having the medals to the total number of participants having the specific count of 7s increases with more 7s. Maybe it is lucky number after all..? Though making a pact with lucifer in order to get the medal might not be the best idea after all...
