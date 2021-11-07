@@ -1,0 +1,1242 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{Project1}
+\author{Anna Toidze}
+\date{10/24/2021}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Project1},
+  pdfauthor={Anna Toidze},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+\hypertarget{analysis-of-olympic-games}{%
+\section{Analysis of olympic games}\label{analysis-of-olympic-games}}
+
+In this project it is assumed that the zipped raw data is located in a
+folder called \emph{data\_folder}, located in the directory above the
+current one. First we unzip our data saved as
+\emph{athlete\_events.zip}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{pwd}
+\FunctionTok{rm}\NormalTok{ ../data\_folder/}\PreprocessorTok{*}\NormalTok{.csv}
+\FunctionTok{unzip}\NormalTok{ ../data\_folder/athlete\_events.zip }\AttributeTok{{-}d}\NormalTok{ ../data\_folder/}
+\end{Highlighting}
+\end{Shaded}
+
+Let's see how our data looks like:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ls}\NormalTok{ ../data\_folder/}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## athlete_events00.csv
+## athlete_events01.csv
+## athlete_events02.csv
+## athlete_events03.csv
+## athlete_events04.csv
+## athlete_events05.csv
+## athlete_events06.csv
+## athlete_events07.csv
+## athlete_events08.csv
+## athlete_events09.csv
+## athlete_events10.csv
+## athlete_events11.csv
+## athlete_events.zip
+## features_description.txt
+\end{verbatim}
+
+\textbf{1.} So we have 11 .csv files, that have to unite in one table.
+Let's load the needed libraries:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#if (!require(x, character.only = TRUE)) \{}
+\CommentTok{\#      install.packages(x, dependencies = TRUE)}
+\CommentTok{\#      library(x, character.only = TRUE)}
+\CommentTok{\#    \}}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(ggExtra)}
+\FunctionTok{library}\NormalTok{(cowplot)}
+\FunctionTok{library}\NormalTok{(car)}
+\FunctionTok{library}\NormalTok{(broomExtra)}
+\FunctionTok{library}\NormalTok{(purrr)}
+\end{Highlighting}
+\end{Shaded}
+
+Uniting all data in one datafram \emph{df\_ol}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{uniting\_data }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(path, }\AttributeTok{extension =} \StringTok{"csv"}\NormalTok{)\{}
+\NormalTok{  pattern }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"*."}\NormalTok{, extension)}
+\NormalTok{  myfiles }\OtherTok{\textless{}{-}}  \FunctionTok{paste0}\NormalTok{(path, }\FunctionTok{list.files}\NormalTok{(path, }\AttributeTok{pattern=}\NormalTok{pattern, }\AttributeTok{all.files=}\ConstantTok{FALSE}\NormalTok{,}
+           \AttributeTok{full.names=}\ConstantTok{FALSE}\NormalTok{))}
+\NormalTok{  myfiles }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{lapply}\NormalTok{(read.csv) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{bind\_rows}\NormalTok{()}
+\NormalTok{\}}
+\NormalTok{path }\OtherTok{\textless{}{-}} \StringTok{"../data\_folder/"}
+
+\NormalTok{df\_ol }\OtherTok{\textless{}{-}} \FunctionTok{uniting\_data}\NormalTok{(path, }\StringTok{"csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{2. } Checking whether our data is actually correct:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{str}\NormalTok{(df\_ol)}
+\FunctionTok{unique}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Sex)}
+\FunctionTok{unique}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Season)}
+\FunctionTok{unique}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Medal)}
+\end{Highlighting}
+\end{Shaded}
+
+It's obvious, that instead of \emph{NA} empty string \emph{``\,``} has
+sometimes been used to showcase the lacking data. Let's reload our data
+with correct parameters:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{uniting\_data }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(path, }\AttributeTok{extension =} \StringTok{"csv"}\NormalTok{, }\AttributeTok{na =} \StringTok{"NA"}\NormalTok{)\{}
+\NormalTok{  pattern }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"*."}\NormalTok{, extension)}
+\NormalTok{  myfiles }\OtherTok{\textless{}{-}}  \FunctionTok{paste0}\NormalTok{(path, }\FunctionTok{list.files}\NormalTok{(path, }\AttributeTok{pattern=}\NormalTok{pattern, }\AttributeTok{all.files=}\ConstantTok{FALSE}\NormalTok{,}
+           \AttributeTok{full.names=}\ConstantTok{FALSE}\NormalTok{))}
+\NormalTok{  myfiles }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{lapply}\NormalTok{(read.csv, }\AttributeTok{na.string =}\NormalTok{ na) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{bind\_rows}\NormalTok{()}
+\NormalTok{\}}
+
+\NormalTok{df\_ol }\OtherTok{\textless{}{-}} \FunctionTok{uniting\_data}\NormalTok{(}\StringTok{"../data\_folder/"}\NormalTok{, }\StringTok{"csv"}\NormalTok{, }\AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{""}\NormalTok{, }\StringTok{"NA"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Let's factor our data, ``G'' has been changed to ``M'' based on the
+names of the participants and the events they participated in:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{unique}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "M" "F" "G" NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Sex=}\FunctionTok{replace}\NormalTok{(Sex, Sex }\SpecialCharTok{==} \StringTok{"G"}\NormalTok{, }\StringTok{"M"}\NormalTok{)) }\CommentTok{\#df\_ol[which(df\_ol$Sex == "G"),] \textless{}{-} "M"}
+
+\FunctionTok{str}\NormalTok{(df\_ol)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    271115 obs. of  15 variables:
+##  $ ID    : int  1 2 3 4 5 5 5 5 5 5 ...
+##  $ Name  : chr  "A Dijiang" "A Lamusi" "Gunnar Nielsen Aaby" "Edgar Lindenau Aabye" ...
+##  $ Sex   : chr  "M" "M" "M" "M" ...
+##  $ Age   : int  24 23 24 34 21 21 25 25 27 27 ...
+##  $ Height: int  180 170 NA NA 185 185 185 185 185 185 ...
+##  $ Weight: num  80 60 NA NA 82 82 82 82 82 82 ...
+##  $ Team  : chr  "China" "China" "Denmark" "Denmark/Sweden" ...
+##  $ NOC   : chr  "CHN" "CHN" "DEN" "DEN" ...
+##  $ Games : chr  "1992 Summer" "2012 Summer" "1920 Summer" "1900 Summer" ...
+##  $ Year  : int  1992 2012 1920 1900 1988 1988 1992 1992 1994 1994 ...
+##  $ Season: chr  "Summer" "Summer" "Summer" "Summer" ...
+##  $ City  : chr  "Barcelona" "London" "Antwerpen" "Paris" ...
+##  $ Sport : chr  "Basketball" "Judo" "Football" "Tug-Of-War" ...
+##  $ Event : chr  "Basketball Men's Basketball" "Judo Men's Extra-Lightweight" "Football Men's Football" "Tug-Of-War Men's Tug-Of-War" ...
+##  $ Medal : chr  NA NA NA "Gold" ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol}\SpecialCharTok{$}\NormalTok{Sex }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Sex)}
+\NormalTok{df\_ol}\SpecialCharTok{$}\NormalTok{Season }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Season)}
+\NormalTok{df\_ol}\SpecialCharTok{$}\NormalTok{Medal }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Medal)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's check some other parameters starting with Sport column. There
+seems to be an typo with football - ``Footba'' instead of ``Football''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{unique}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Sport)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Basketball"                "Judo"                     
+##  [3] "Football"                  "Tug-Of-War"               
+##  [5] "Speed Skating"             "Cross Country Skiing"     
+##  [7] "Athletics"                 "Ice Hockey"               
+##  [9] "Swimming"                  "Badminton"                
+## [11] "Sailing"                   "Biathlon"                 
+## [13] "Gymnastics"                "Art Competitions"         
+## [15] "Alpine Skiing"             "Handball"                 
+## [17] "Weightlifting"             "Wrestling"                
+## [19] "Luge"                      "Water Polo"               
+## [21] "Hockey"                    "Rowing"                   
+## [23] "Bobsleigh"                 "Fencing"                  
+## [25] "Equestrianism"             "Shooting"                 
+## [27] "Boxing"                    "Taekwondo"                
+## [29] "Cycling"                   "Diving"                   
+## [31] "Canoeing"                  "Tennis"                   
+## [33] "Modern Pentathlon"         "Figure Skating"           
+## [35] "Golf"                      "Softball"                 
+## [37] "Archery"                   "Volleyball"               
+## [39] "Synchronized Swimming"     "Table Tennis"             
+## [41] "Nordic Combined"           "Baseball"                 
+## [43] "Rhythmic Gymnastics"       "Freestyle Skiing"         
+## [45] "Rugby Sevens"              "Trampolining"             
+## [47] "Beach Volleyball"          "Triathlon"                
+## [49] "Ski Jumping"               "Curling"                  
+## [51] "Snowboarding"              "Rugby"                    
+## [53] "Short Track Speed Skating" "Skeleton"                 
+## [55] "Lacrosse"                  "Polo"                     
+## [57] "Cricket"                   "Racquets"                 
+## [59] "Motorboating"              "Military Ski Patrol"      
+## [61] "Croquet"                   "Jeu De Paume"             
+## [63] NA                          "Roque"                    
+## [65] "Alpinism"                  "Basque Pelota"            
+## [67] "Footba"                    "Aeronautics"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Sport=}\FunctionTok{replace}\NormalTok{(Sport, Sport }\SpecialCharTok{==} \StringTok{"Footba"}\NormalTok{, }\StringTok{"Football"}\NormalTok{)) }
+\FunctionTok{unique}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Sport)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Basketball"                "Judo"                     
+##  [3] "Football"                  "Tug-Of-War"               
+##  [5] "Speed Skating"             "Cross Country Skiing"     
+##  [7] "Athletics"                 "Ice Hockey"               
+##  [9] "Swimming"                  "Badminton"                
+## [11] "Sailing"                   "Biathlon"                 
+## [13] "Gymnastics"                "Art Competitions"         
+## [15] "Alpine Skiing"             "Handball"                 
+## [17] "Weightlifting"             "Wrestling"                
+## [19] "Luge"                      "Water Polo"               
+## [21] "Hockey"                    "Rowing"                   
+## [23] "Bobsleigh"                 "Fencing"                  
+## [25] "Equestrianism"             "Shooting"                 
+## [27] "Boxing"                    "Taekwondo"                
+## [29] "Cycling"                   "Diving"                   
+## [31] "Canoeing"                  "Tennis"                   
+## [33] "Modern Pentathlon"         "Figure Skating"           
+## [35] "Golf"                      "Softball"                 
+## [37] "Archery"                   "Volleyball"               
+## [39] "Synchronized Swimming"     "Table Tennis"             
+## [41] "Nordic Combined"           "Baseball"                 
+## [43] "Rhythmic Gymnastics"       "Freestyle Skiing"         
+## [45] "Rugby Sevens"              "Trampolining"             
+## [47] "Beach Volleyball"          "Triathlon"                
+## [49] "Ski Jumping"               "Curling"                  
+## [51] "Snowboarding"              "Rugby"                    
+## [53] "Short Track Speed Skating" "Skeleton"                 
+## [55] "Lacrosse"                  "Polo"                     
+## [57] "Cricket"                   "Racquets"                 
+## [59] "Motorboating"              "Military Ski Patrol"      
+## [61] "Croquet"                   "Jeu De Paume"             
+## [63] NA                          "Roque"                    
+## [65] "Alpinism"                  "Basque Pelota"            
+## [67] "Aeronautics"
+\end{verbatim}
+
+Let's check our weight, age and height distributions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 214
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\FunctionTok{subset}\NormalTok{(df\_ol, }\FunctionTok{complete.cases}\NormalTok{(Sex)), }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Sex, }\AttributeTok{y =}\NormalTok{ Weight, }\AttributeTok{fill =}\NormalTok{ Sex))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette=}\StringTok{"RdBu"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T)), }\AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, (}\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T)}\SpecialCharTok{{-}}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T))}\SpecialCharTok{/}\DecValTok{10}
+\NormalTok{)) }\SpecialCharTok{+}
+
+   \FunctionTok{labs}\NormalTok{(}\AttributeTok{title=} \StringTok{"Weight Distribution of Olympics Athletes by Gender"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 62874 rows containing non-finite values (stat_boxplot).
+\end{verbatim}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-9-1.pdf} We
+have a weird outlier with the weight of less than 25. We have Helmut
+Lehmann, who doesn't really contribute anything except for his age and
+height - no other parameters are known. Let's just filter him off.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol[}\FunctionTok{which}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight }\SpecialCharTok{\textless{}} \DecValTok{25}\NormalTok{),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           ID           Name Sex Age Height Weight Team  NOC Games Year Season
+## 135886 68370 Helmut Lehmann   M  25    178      7 <NA> <NA>  <NA>   NA   <NA>
+##        City Sport Event Medal
+## 135886 <NA>  <NA>  <NA>  <NA>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\FunctionTok{which}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight }\SpecialCharTok{\textless{}} \DecValTok{25}\NormalTok{)),]}
+\end{Highlighting}
+\end{Shaded}
+
+Let's do the same with age and height. We have a very tall female, with
+height of 340 which is impossible, and a male of age 240. Let's check
+whether that woman might have participated in other events as well and
+substitute her height accordingly. Same goes for the age.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\FunctionTok{subset}\NormalTok{(df\_ol, }\FunctionTok{complete.cases}\NormalTok{(Sex)), }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Sex, }\AttributeTok{y =}\NormalTok{ Height, }\AttributeTok{fill =}\NormalTok{ Sex))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette=}\StringTok{"RdBu"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T)), }\AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, (}\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T)}\SpecialCharTok{{-}}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T))}\SpecialCharTok{/}\DecValTok{10}
+\NormalTok{)) }\SpecialCharTok{+}
+
+   \FunctionTok{labs}\NormalTok{(}\AttributeTok{title=} \StringTok{"Height Distribution of Olympics Athletes by Gender"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 60170 rows containing non-finite values (stat_boxplot).
+\end{verbatim}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\FunctionTok{subset}\NormalTok{(df\_ol, }\FunctionTok{complete.cases}\NormalTok{(Sex)), }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Sex, }\AttributeTok{y =}\NormalTok{ Age, }\AttributeTok{fill =}\NormalTok{ Sex))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette=}\StringTok{"RdBu"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T)), }\AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{, (}\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T)}\SpecialCharTok{{-}}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T))}\SpecialCharTok{/}\DecValTok{10}
+\NormalTok{)) }\SpecialCharTok{+}
+
+   \FunctionTok{labs}\NormalTok{(}\AttributeTok{title=} \StringTok{"Age Distribution of Olympics Athletes by Gender"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 9474 rows containing non-finite values (stat_boxplot).
+\end{verbatim}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-11-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Who is 340 cm tall?}
+\NormalTok{df\_ol[}\FunctionTok{which}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height }\SpecialCharTok{==} \DecValTok{340}\NormalTok{),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          ID                            Name Sex Age Height Weight     Team NOC
+## 45651 23549 Kirsty Leigh Coventry (-Seward)   F  28    340     64 Zimbabwe ZIM
+##             Games Year Season   City    Sport
+## 45651 2012 Summer 2012 Summer London Swimming
+##                                               Event Medal
+## 45651 Swimming Women's 200 metres Individual Medley  <NA>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Let\textquotesingle{}s check her height:}
+\NormalTok{df\_ol[}\FunctionTok{which}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Name }\SpecialCharTok{==} \StringTok{"Kirsty Leigh Coventry ({-}Seward)"}\NormalTok{),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          ID                            Name Sex Age Height Weight     Team NOC
+## 45638 23549 Kirsty Leigh Coventry (-Seward)   F  16    176     64 Zimbabwe ZIM
+## 45639 23549 Kirsty Leigh Coventry (-Seward)   F  16    176     64 Zimbabwe ZIM
+## 45640 23549 Kirsty Leigh Coventry (-Seward)   F  16    176     64 Zimbabwe ZIM
+## 45641 23549 Kirsty Leigh Coventry (-Seward)   F  16    176     64 Zimbabwe ZIM
+## 45642 23549 Kirsty Leigh Coventry (-Seward)   F  20    176     64 Zimbabwe ZIM
+## 45643 23549 Kirsty Leigh Coventry (-Seward)   F  20    176     64 Zimbabwe ZIM
+## 45644 23549 Kirsty Leigh Coventry (-Seward)   F  20    176     64 Zimbabwe ZIM
+## 45645 23549 Kirsty Leigh Coventry (-Seward)   F  24    176     64 Zimbabwe ZIM
+## 45646 23549 Kirsty Leigh Coventry (-Seward)   F  24    176     64 Zimbabwe ZIM
+## 45647 23549 Kirsty Leigh Coventry (-Seward)   F  24    176     64 Zimbabwe ZIM
+## 45648 23549 Kirsty Leigh Coventry (-Seward)   F  24    176     64 Zimbabwe ZIM
+## 45649 23549 Kirsty Leigh Coventry (-Seward)   F  28    176     64 Zimbabwe ZIM
+## 45650 23549 Kirsty Leigh Coventry (-Seward)   F  28    176     64 Zimbabwe ZIM
+## 45651 23549 Kirsty Leigh Coventry (-Seward)   F  28    340     64 Zimbabwe ZIM
+## 45652 23549 Kirsty Leigh Coventry (-Seward)   F  32    176     64 Zimbabwe ZIM
+## 45653 23549 Kirsty Leigh Coventry (-Seward)   F  32    176     64 Zimbabwe ZIM
+##             Games Year Season           City    Sport
+## 45638 2000 Summer 2000 Summer         Sydney Swimming
+## 45639 2000 Summer 2000 Summer         Sydney Swimming
+## 45640 2000 Summer 2000 Summer         Sydney Swimming
+## 45641 2000 Summer 2000 Summer         Sydney Swimming
+## 45642 2004 Summer 2004 Summer         Athina Swimming
+## 45643 2004 Summer 2004 Summer         Athina Swimming
+## 45644 2004 Summer 2004 Summer         Athina Swimming
+## 45645 2008 Summer 2008 Summer        Beijing Swimming
+## 45646 2008 Summer 2008 Summer        Beijing Swimming
+## 45647 2008 Summer 2008 Summer        Beijing Swimming
+## 45648 2008 Summer 2008 Summer        Beijing Swimming
+## 45649 2012 Summer 2012 Summer         London Swimming
+## 45650 2012 Summer 2012 Summer         London Swimming
+## 45651 2012 Summer 2012 Summer         London Swimming
+## 45652 2016 Summer 2016 Summer Rio de Janeiro Swimming
+## 45653 2016 Summer 2016 Summer Rio de Janeiro Swimming
+##                                               Event  Medal
+## 45638          Swimming Women's 50 metres Freestyle   <NA>
+## 45639         Swimming Women's 100 metres Freestyle   <NA>
+## 45640        Swimming Women's 100 metres Backstroke   <NA>
+## 45641 Swimming Women's 200 metres Individual Medley   <NA>
+## 45642        Swimming Women's 100 metres Backstroke Silver
+## 45643        Swimming Women's 200 metres Backstroke   Gold
+## 45644 Swimming Women's 200 metres Individual Medley Bronze
+## 45645        Swimming Women's 100 metres Backstroke Silver
+## 45646        Swimming Women's 200 metres Backstroke   Gold
+## 45647 Swimming Women's 200 metres Individual Medley Silver
+## 45648 Swimming Women's 400 metres Individual Medley Silver
+## 45649        Swimming Women's 100 metres Backstroke   <NA>
+## 45650        Swimming Women's 200 metres Backstroke   <NA>
+## 45651 Swimming Women's 200 metres Individual Medley   <NA>
+## 45652        Swimming Women's 100 metres Backstroke   <NA>
+## 45653        Swimming Women's 200 metres Backstroke   <NA>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#It seems to be 176 cm, let\textquotesingle{}s correct the false data:}
+\NormalTok{df\_ol }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Height=}\FunctionTok{replace}\NormalTok{(Height, Height }\SpecialCharTok{==} \DecValTok{340}\NormalTok{, }\DecValTok{176}\NormalTok{)) }
+\CommentTok{\#Now height distribution looks good}
+
+\CommentTok{\#Who\textquotesingle{}s 240 years old?}
+\NormalTok{df\_ol[}\FunctionTok{which}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age }\SpecialCharTok{==} \DecValTok{240}\NormalTok{), }\DecValTok{10}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1912
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Let\textquotesingle{}s check whether he participated in other events as well:}
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Name }\SpecialCharTok{==} \StringTok{"Flicien Jules mile Courbet"}\NormalTok{, Year }\SpecialCharTok{==}\NormalTok{ df\_ol[}\FunctionTok{which}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age }\SpecialCharTok{==} \DecValTok{240}\NormalTok{), }\DecValTok{10}\NormalTok{]) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      ID                       Name Sex Age Height Weight    Team NOC
+## 1 23459 Flicien Jules mile Courbet   M  24     NA     NA Belgium BEL
+## 2 23459 Flicien Jules mile Courbet   M 240     NA     NA Belgium BEL
+## 3 23459 Flicien Jules mile Courbet   M  24     NA     NA Belgium BEL
+##         Games Year Season      City      Sport
+## 1 1912 Summer 1912 Summer Stockholm Water Polo
+## 2 1912 Summer 1912 Summer Stockholm   Swimming
+## 3 1912 Summer 1912 Summer Stockholm   Swimming
+##                                    Event  Medal
+## 1            Water Polo Men's Water Polo Bronze
+## 2 Swimming Men's 200 metres Breaststroke   <NA>
+## 3 Swimming Men's 400 metres Breaststroke   <NA>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#We see he\textquotesingle{}s 24 that year:}
+\NormalTok{df\_ol }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol }\SpecialCharTok{\%\textgreater{}\%}  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Age=}\FunctionTok{replace}\NormalTok{(Age, Age }\SpecialCharTok{==} \DecValTok{240}\NormalTok{, }\DecValTok{24}\NormalTok{))}
+\CommentTok{\#Now age distribution is fixed}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{3.} The age of two youngest athletes of each sex on Olympics in
+year 1992:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Year }\SpecialCharTok{==} \DecValTok{1992}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{arrange}\NormalTok{(Age) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(Sex) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{slice}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(Age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adding missing grouping variables: `Sex`
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+## # Groups:   Sex [2]
+##   Sex     Age
+##   <fct> <dbl>
+## 1 F        12
+## 2 M        11
+\end{verbatim}
+
+\textbf{4. } Calculate mean and standard deviation for \textbf{height},
+each sex:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{aggregate}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{by =} \FunctionTok{list}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Sex) , }\AttributeTok{FUN =} \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{cbind}\NormalTok{(}\FunctionTok{mean}\NormalTok{(x, }\AttributeTok{na.rm =}\NormalTok{ T), }\FunctionTok{sd}\NormalTok{(x, }\AttributeTok{na.rm =}\NormalTok{ T)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Group.1        x.1        x.2
+## 1       F 167.839728   8.778463
+## 2       M 178.858620   9.360377
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol[}\FunctionTok{complete.cases}\NormalTok{(df\_ol[,}\DecValTok{3}\NormalTok{]),] }\SpecialCharTok{\%\textgreater{}\%}  \FunctionTok{group\_by}\NormalTok{(Sex) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}
+    \AttributeTok{mean =} \FunctionTok{mean}\NormalTok{(Height, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),  }\AttributeTok{sd =} \FunctionTok{sd}\NormalTok{(Height, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   Sex    mean    sd
+##   <fct> <dbl> <dbl>
+## 1 F      168.  8.78
+## 2 M      179.  9.36
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(Sex) }\SpecialCharTok{==}\NormalTok{ F) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(Sex) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}
+    \AttributeTok{mean =} \FunctionTok{mean}\NormalTok{(Height, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),  }\AttributeTok{sd =} \FunctionTok{sd}\NormalTok{(Height, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   Sex    mean    sd
+##   <fct> <dbl> <dbl>
+## 1 F      168.  8.78
+## 2 M      179.  9.36
+\end{verbatim}
+
+\textbf{5. } Mean and standard deviation of \textbf{height} for female
+tennis players on 2000 Olympics. Round to 1 digit after decimal.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Sex }\SpecialCharTok{\%in\%} \StringTok{"F"}\NormalTok{, Year }\SpecialCharTok{\%in\%} \DecValTok{2000}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}
+    \AttributeTok{mean =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(Height, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\DecValTok{1}\NormalTok{),  }\AttributeTok{sd =} \FunctionTok{round}\NormalTok{(}\FunctionTok{sd}\NormalTok{(Height, }\AttributeTok{na.rm =}\NormalTok{ T), }\DecValTok{1}\NormalTok{)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   mean  sd
+## 1  169 9.5
+\end{verbatim}
+
+\textbf{6. }In which category of sport did the heaviest athlete of 2006
+Olympics participate?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Year }\SpecialCharTok{\%in\%} \DecValTok{2006}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{arrange}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{Weight) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{select}\NormalTok{(Sport)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      Sport
+## 1 Skeleton
+\end{verbatim}
+
+\textbf{7. }How many gold medals obtained by females from 1980 till 2010
+(both inclusive)?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Sex }\SpecialCharTok{\%in\%} \StringTok{"F"}\NormalTok{, Year }\SpecialCharTok{\%in\%}\NormalTok{ (}\DecValTok{1980}\SpecialCharTok{:}\DecValTok{2010}\NormalTok{), Medal }\SpecialCharTok{\%in\%} \StringTok{"Gold"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{summarize}\NormalTok{( }\AttributeTok{n =} \FunctionTok{n}\NormalTok{()) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      n
+## 1 2249
+\end{verbatim}
+
+\textbf{8. }How many times did John Aalberg participate in Olympic games
+over the years in total?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Name }\SpecialCharTok{==} \StringTok{"John Aalberg"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{n =} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(Year)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   n
+## 1 2
+\end{verbatim}
+
+He participated twice in Olympic games.
+
+\textbf{9. }Determine the most and least represented age group
+({[}15-25), {[}25-35), {[}35-45), {[}45-55{]}) on 2008 Olympics. Least
+represented is the one between 45 and 55, most represented between 25
+and 35.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Year }\SpecialCharTok{\%in\%} \DecValTok{2002}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Agegroup =} \FunctionTok{cut}\NormalTok{(Age, }\AttributeTok{breaks =} \FunctionTok{c}\NormalTok{(}\DecValTok{15}\NormalTok{, }\DecValTok{25}\NormalTok{, }\DecValTok{35}\NormalTok{, }\DecValTok{45}\NormalTok{, }\DecValTok{56}\NormalTok{), }\AttributeTok{right =}\NormalTok{ F)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Agegroup) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{n =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n), }\FunctionTok{which.min}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   Agegroup     n
+##   <fct>    <int>
+## 1 [25,35)   2230
+## 2 [45,56)      8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# df\_ol\_agegr[c(which.max(df\_ol\_agegr$n), which.min(df\_ol\_agegr$n)),]}
+
+\NormalTok{df\_ol\_2002 }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol[df\_ol}\SpecialCharTok{$}\NormalTok{Year }\SpecialCharTok{\%in\%} \DecValTok{2002}\NormalTok{, ]}
+\FunctionTok{ggplot}\NormalTok{(df\_ol\_2002, }\FunctionTok{aes}\NormalTok{(Age)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{boundary =} \DecValTok{15}\NormalTok{, }\AttributeTok{binwidth =} \DecValTok{10}\NormalTok{, }\AttributeTok{bins =} \DecValTok{5}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"black"}\NormalTok{, }\AttributeTok{right =}\NormalTok{ F)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\textbf{10. }How did the number of different categories of sports change
+from 1994 to 2002 Olympics?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol\_num\_sports\_02\_94 }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Year }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{1994}\NormalTok{, }\DecValTok{2002}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Year) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{n =} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(Sport)))}
+
+
+\CommentTok{\#Increase by:}
+\NormalTok{df\_ol\_num\_sports\_02\_94}\SpecialCharTok{$}\NormalTok{n[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{{-}}\NormalTok{ df\_ol\_num\_sports\_02\_94}\SpecialCharTok{$}\NormalTok{n[}\DecValTok{1}\NormalTok{] }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+
+\textbf{11. }What are the top 3 countries for each Olympics season and
+medal?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(Medal) }\SpecialCharTok{==}\NormalTok{ F) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Season, Medal, NOC) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{n =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}\StringTok{"Num. of Medals"} \OtherTok{=} \FunctionTok{max}\NormalTok{(n), }\AttributeTok{Country =} \FunctionTok{paste}\NormalTok{(NOC[}\FunctionTok{which}\NormalTok{(n }\SpecialCharTok{==} \FunctionTok{max}\NormalTok{(n))], }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` has grouped output by 'Season', 'Medal'. You can override using the `.groups` argument.
+\end{verbatim}
+
+\begin{verbatim}
+## `summarise()` has grouped output by 'Season'. You can override using the `.groups` argument.
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 6 x 4
+## # Groups:   Season [2]
+##   Season Medal  `Num. of Medals` Country
+##   <fct>  <fct>             <int> <chr>  
+## 1 Summer Bronze             1197 USA    
+## 2 Summer Gold               2472 USA    
+## 3 Summer Silver             1333 USA    
+## 4 Winter Bronze              215 FIN    
+## 5 Winter Gold                305 CAN    
+## 6 Winter Silver              308 USA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(Medal) }\SpecialCharTok{==}\NormalTok{ F) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Season, Medal, NOC) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{n =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{arrange}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{n) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+ \FunctionTok{summarise\_all}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\FunctionTok{paste}\NormalTok{(., }\AttributeTok{collapse =} \StringTok{\textquotesingle{}; \textquotesingle{}}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` has grouped output by 'Season', 'Medal'. You can override using the `.groups` argument.
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 6 x 4
+## # Groups:   Season [2]
+##   Season Medal  NOC           n             
+##   <fct>  <fct>  <chr>         <chr>         
+## 1 Summer Bronze USA; GER; GBR 1197; 649; 620
+## 2 Summer Gold   USA; URS; GBR 2472; 832; 636
+## 3 Summer Silver USA; GBR; URS 1333; 729; 635
+## 4 Winter Bronze FIN; SWE; USA 215; 177; 161 
+## 5 Winter Gold   CAN; URS; USA 305; 250; 166 
+## 6 Winter Silver USA; CAN; NOR 308; 199; 165
+\end{verbatim}
+
+\textbf{12. }Put standardized height values into a new column
+\emph{Height\_z\_scores}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol\_z }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Height\_z\_scores =}\NormalTok{ (Height }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(Height, }\AttributeTok{na.rm =}\NormalTok{T))}\SpecialCharTok{/}\FunctionTok{sd}\NormalTok{(Height, }\AttributeTok{na.rm =}\NormalTok{ T))}
+
+\FunctionTok{head}\NormalTok{(}\FunctionTok{scale}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            [,1]
+## [1,]  0.4431254
+## [2,] -0.5075774
+## [3,]         NA
+## [4,]         NA
+## [5,]  0.9184768
+## [6,]  0.9184768
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol\_scale }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Height\_scaled =} \FunctionTok{scale}\NormalTok{(Height))}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{13. }Put standardized height values into a new column
+\emph{Height\_min\_max\_scores} (min-max normalization, every value in
+{[}0,1{]}):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol\_z\_minmax }\OtherTok{\textless{}{-}}\NormalTok{ df\_ol\_z }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Height\_min\_max\_scaled =}\NormalTok{ (Height }\SpecialCharTok{{-}} \FunctionTok{min}\NormalTok{(Height, }\AttributeTok{na.rm =}\NormalTok{T))}\SpecialCharTok{/}\NormalTok{(}\FunctionTok{max}\NormalTok{(Height, }\AttributeTok{na.rm =}\NormalTok{ T)}\SpecialCharTok{{-}}\FunctionTok{min}\NormalTok{(Height, }\AttributeTok{na.rm =}\NormalTok{T)))}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{14. }Height, weight and age of male and female athletes, that
+participated in winter Olympics. As these variables are continuous, we
+could theoriticaly compare them by t-test. For this purpose, we first
+have to test for normal distribution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#General statistics:}
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Season }\SpecialCharTok{\%in\%} \StringTok{"Winter"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Sex) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\AttributeTok{.cols =} \FunctionTok{c}\NormalTok{(Height, Weight, Age), }\FunctionTok{list}\NormalTok{(}\AttributeTok{mean =} \SpecialCharTok{\textasciitilde{}} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(}\AttributeTok{x =}\NormalTok{ ., }\AttributeTok{na.rm =}\NormalTok{ T), }\DecValTok{2}\NormalTok{), }\AttributeTok{sd =} \SpecialCharTok{\textasciitilde{}} \FunctionTok{round}\NormalTok{(}\FunctionTok{sd}\NormalTok{(}\AttributeTok{x =}\NormalTok{ ., }\AttributeTok{na.rm =}\NormalTok{ T), }\DecValTok{2}\NormalTok{))))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 7
+##   Sex   Height_mean Height_sd Weight_mean Weight_sd Age_mean Age_sd
+##   <fct>       <dbl>     <dbl>       <dbl>     <dbl>    <dbl>  <dbl>
+## 1 F            167.      6.03        59.8      7.06     24.0   4.69
+## 2 M            179.      6.59        76.4     10.3      25.5   4.75
+\end{verbatim}
+
+Let's take a look at weight first. The data is normally distributed as
+seen on QQplot and the density distribution, so we can use the t-test.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Testing for normal distribution}
+\FunctionTok{ggplot}\NormalTok{(}\FunctionTok{subset}\NormalTok{(df\_ol, }\FunctionTok{complete.cases}\NormalTok{(Sex)), }\FunctionTok{aes}\NormalTok{(Weight, }\AttributeTok{fill =}\NormalTok{ Sex))}\SpecialCharTok{+}
+  \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{name =} \StringTok{"Weight"}\NormalTok{, }
+                     \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T), }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T)), }
+                     \AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T), }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T), }
+\NormalTok{                                  (}\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm=}\NormalTok{T)}\SpecialCharTok{{-}}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{na.rm =}\NormalTok{ T))}\SpecialCharTok{/}\DecValTok{10}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_discrete}\NormalTok{(}\AttributeTok{name =} \StringTok{"Sex"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 62874 rows containing non-finite values (stat_density).
+\end{verbatim}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-24-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#QQplot}
+\FunctionTok{qqPlot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"F"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{xlab =} \StringTok{"Quantiles of normal distribution"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Qunatiles of weights of females"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-24-2.pdf}
+
+\begin{verbatim}
+## [1] 32846 32847
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqPlot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"M"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{xlab =} \StringTok{"Quantiles of normal distribution"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Quantiles of weights of males"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-24-3.pdf}
+
+\begin{verbatim}
+## [1] 17437 17438
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#t{-}test}
+\NormalTok{t\_weight }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"F"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Weight, }\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"M"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Weight, }\AttributeTok{alternative =} \StringTok{"two.sided"}\NormalTok{)}
+\NormalTok{t\_weight}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  filter(df_ol, Sex == "F")$Weight and filter(df_ol, Sex == "M")$Weight
+## t = -297.36, df = 165260, p-value < 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -15.82638 -15.61911
+## sample estimates:
+## mean of x mean of y 
+##  60.02133  75.74407
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{t\_weight }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(t\_weight)[}\FunctionTok{c}\NormalTok{(}\StringTok{"statistic"}\NormalTok{, }\StringTok{"p.value"}\NormalTok{, }\StringTok{"parameter"}\NormalTok{, }\StringTok{"method"}\NormalTok{, }\StringTok{"alternative"}\NormalTok{)]}
+\FunctionTok{names}\NormalTok{(t\_weight) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Statistic"}\NormalTok{, }\StringTok{"P Value"}\NormalTok{, }\StringTok{"Degrees of Freedom"}\NormalTok{, }\StringTok{"Method"}\NormalTok{, }\StringTok{"Alternative Hypothesis"}\NormalTok{)}
+\NormalTok{t\_weight}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 5
+##   Statistic `P Value` `Degrees of Freedom` Method                  `Alternative Hy~
+##       <dbl>     <dbl>                <dbl> <chr>                   <chr>           
+## 1     -297.         0              165260. Welch Two Sample t-test two.sided
+\end{verbatim}
+
+Description as in article: The weight distribution of females and males
+participating in Olympic games were compared. As the weight was normally
+distributed, two-sided Welch Two Sample t-test was used and significant
+difference was discovered, with test statistic equal to -297.3577556 and
+p-Value of 0.
+
+Now let's do the same for height:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Testing for normal distribution}
+\FunctionTok{ggplot}\NormalTok{(}\FunctionTok{subset}\NormalTok{(df\_ol, }\FunctionTok{complete.cases}\NormalTok{(Sex)), }\FunctionTok{aes}\NormalTok{(Height, }\AttributeTok{fill =}\NormalTok{ Sex))}\SpecialCharTok{+}
+  \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{name =} \StringTok{"Height"}\NormalTok{, }
+                     \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T), }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T)), }
+                     \AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T), }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T), }
+\NormalTok{                                  (}\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm=}\NormalTok{T)}\SpecialCharTok{{-}}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{na.rm =}\NormalTok{ T))}\SpecialCharTok{/}\DecValTok{10}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_discrete}\NormalTok{(}\AttributeTok{name =} \StringTok{"Sex"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 60170 rows containing non-finite values (stat_density).
+\end{verbatim}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-25-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#QQplot}
+\FunctionTok{qqPlot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"F"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{xlab =} \StringTok{"Quantiles of normal distribution"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Qunatiles of Heights of females"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-25-2.pdf}
+
+\begin{verbatim}
+## [1] 15647 58561
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqPlot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"M"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{xlab =} \StringTok{"Quantiles of normal distribution"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Quantiles of Heights of males"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-25-3.pdf}
+
+\begin{verbatim}
+## [1] 120794 132008
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Everything is normally distributed. }
+
+\CommentTok{\#t{-}test}
+\NormalTok{t\_height }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"F"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Height, }\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"M"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Height, }\AttributeTok{alternative =} \StringTok{"two.sided"}\NormalTok{)}
+\NormalTok{t\_height}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  filter(df_ol, Sex == "F")$Height and filter(df_ol, Sex == "M")$Height
+## t = -263.1, df = 139790, p-value < 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -11.10098 -10.93681
+## sample estimates:
+## mean of x mean of y 
+##  167.8397  178.8586
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{t\_height }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(t\_height)[}\FunctionTok{c}\NormalTok{(}\StringTok{"statistic"}\NormalTok{, }\StringTok{"p.value"}\NormalTok{, }\StringTok{"parameter"}\NormalTok{, }\StringTok{"method"}\NormalTok{, }\StringTok{"alternative"}\NormalTok{)]}
+\FunctionTok{names}\NormalTok{(t\_height) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Statistic"}\NormalTok{, }\StringTok{"P Value"}\NormalTok{, }\StringTok{"Degrees of Freedom"}\NormalTok{, }\StringTok{"Method"}\NormalTok{, }\StringTok{"Alternative Hypothesis"}\NormalTok{)}
+\NormalTok{t\_height}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 5
+##   Statistic `P Value` `Degrees of Freedom` Method                  `Alternative Hy~
+##       <dbl>     <dbl>                <dbl> <chr>                   <chr>           
+## 1     -263.         0              139790. Welch Two Sample t-test two.sided
+\end{verbatim}
+
+Description as in article: The height distribution of females and males
+participating in Olympic games were compared. As the height was normally
+distributed, two-sided Welch Two Sample t-test was used and significant
+difference was discovered, with test statistic equal to -263.101237 and
+p-Value of 0.
+
+Now let's do the same for age. Age is not a continuous variable and is
+not normally distributed, however the sample size is very large which is
+why t-test might still be a choice. Mann Whitney U Test was also run.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Testing for normal distribution}
+\FunctionTok{ggplot}\NormalTok{(}\FunctionTok{subset}\NormalTok{(df\_ol, }\FunctionTok{complete.cases}\NormalTok{(Sex)), }\FunctionTok{aes}\NormalTok{(Age, }\AttributeTok{fill =}\NormalTok{ Sex))}\SpecialCharTok{+}
+  \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{name =} \StringTok{"Age"}\NormalTok{, }
+                     \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T), }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T)), }
+                     \AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T), }\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T), }
+\NormalTok{                                  (}\FunctionTok{max}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm=}\NormalTok{T)}\SpecialCharTok{{-}}\FunctionTok{min}\NormalTok{(df\_ol}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{na.rm =}\NormalTok{ T))}\SpecialCharTok{/}\DecValTok{10}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_discrete}\NormalTok{(}\AttributeTok{name =} \StringTok{"Sex"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 9474 rows containing non-finite values (stat_density).
+\end{verbatim}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-26-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#QQplot}
+\FunctionTok{qqPlot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"F"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{xlab =} \StringTok{"Quantiles of normal distribution"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Qunatiles of Ages of females"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-26-2.pdf}
+
+\begin{verbatim}
+## [1] 54685 54686
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqPlot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"M"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{xlab =} \StringTok{"Quantiles of normal distribution"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Quantiles of Ages of males"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report_files/figure-latex/unnamed-chunk-26-3.pdf}
+
+\begin{verbatim}
+## [1] 186997  72524
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Everything is not really normally distributed but we have very large dataset, which  }
+
+\CommentTok{\#t{-}test}
+\NormalTok{t\_age }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"F"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Age, }\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"M"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Age, }\AttributeTok{alternative =} \StringTok{"two.sided"}\NormalTok{)}
+\NormalTok{t\_age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  filter(df_ol, Sex == "F")$Age and filter(df_ol, Sex == "M")$Age
+## t = -97.815, df = 150733, p-value < 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -2.595677 -2.493698
+## sample estimates:
+## mean of x mean of y 
+##  23.73284  26.27753
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{t\_age }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(t\_age)[}\FunctionTok{c}\NormalTok{(}\StringTok{"statistic"}\NormalTok{, }\StringTok{"p.value"}\NormalTok{, }\StringTok{"parameter"}\NormalTok{, }\StringTok{"method"}\NormalTok{, }\StringTok{"alternative"}\NormalTok{)]}
+\FunctionTok{names}\NormalTok{(t\_age) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Statistic"}\NormalTok{, }\StringTok{"P Value"}\NormalTok{, }\StringTok{"Degrees of Freedom"}\NormalTok{, }\StringTok{"Method"}\NormalTok{, }\StringTok{"Alternative Hypothesis"}\NormalTok{)}
+\NormalTok{t\_age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 5
+##   Statistic `P Value` `Degrees of Freedom` Method                  `Alternative Hy~
+##       <dbl>     <dbl>                <dbl> <chr>                   <chr>           
+## 1     -97.8         0              150733. Welch Two Sample t-test two.sided
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wlic }\OtherTok{\textless{}{-}} \FunctionTok{wilcox.test}\NormalTok{(}\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"F"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Age, }\FunctionTok{filter}\NormalTok{(df\_ol, Sex }\SpecialCharTok{==} \StringTok{"M"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{Age)}
+\NormalTok{wlic }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(wlic)}
+\FunctionTok{names}\NormalTok{(wlic) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Statistic"}\NormalTok{, }\StringTok{"P Value"}\NormalTok{, }\StringTok{"Method"}\NormalTok{, }\StringTok{"Alternative Hypothesis"}\NormalTok{)}
+\NormalTok{wlic}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 4
+##     Statistic `P Value` Method                                            `Alternative Hy~
+##         <dbl>     <dbl> <chr>                                             <chr>           
+## 1 5295764730.         0 Wilcoxon rank sum test with continuity correction two.sided
+\end{verbatim}
+
+Description as in article: The age distribution of females and males
+participating in Olympic games were compared. As the sample size was
+very large, two-sided Welch Two Sample t-test was used despite the fact
+that some of the criteria were not fulfilled, and significant difference
+was discovered, with test statistic equal to -97.8149499 and p-Value of
+0. Also Mann-Whitney test was run with test statistic equal to
+\ensuremath{5.2957647\times 10^{9}} and p-Value of 0.
+
+\begin{table}
+\caption{Comparing the height, weight, and age differences for females and males participating in the olympics.}
+\begin{tabular}{cccccc}
+\toprule
+Variable compared $ Statistic & P Value               & Degrees of Freedom & Method                  & Alternative Hypothesis \\ \midrule 
+$Weight $-297.3578$  & $0$ & $165260.5$           & Welch Two Sample t-test & Two Sided      \\ 
+$Height $-263.1012$  & $0$ & $139790.5$           & Welch Two Sample t-test & Two Sided      \\
+$Age $-97.81495$  & $0$ & $150732.7$           & Welch Two Sample t-test & Two Sided      \\ \bottomrule       
+\end{tabular}
+\end{table}
+
+\textbf{15. }
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_ol }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(Team, Medal) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{select}\NormalTok{(Team, Medal) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{n =} \FunctionTok{n}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` has grouped output by 'Team'. You can override using the `.groups` argument.
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 1,716 x 3
+## # Groups:   Team [1,185]
+##    Team                  Medal      n
+##    <chr>                 <fct>  <int>
+##  1 30. Februar           <NA>       2
+##  2 A North American Team Bronze     4
+##  3 Acipactli             <NA>       3
+##  4 Acturus               <NA>       2
+##  5 Afghanistan           Bronze     2
+##  6 Afghanistan           <NA>     124
+##  7 Akatonbo              <NA>       3
+##  8 Alain IV              <NA>       3
+##  9 Albania               <NA>      70
+## 10 Alcaid                <NA>       3
+## # ... with 1,706 more rows
+\end{verbatim}
+
+\end{document}
