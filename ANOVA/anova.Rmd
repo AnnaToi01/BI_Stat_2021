@@ -48,6 +48,10 @@ df <- uniting_data(path)
 unique(df$age)
 df <- df %>% mutate(age=replace(age, age == "thirty-one", 31)) 
 df$age <- as.numeric(df$age)
+unique(df$age) # We have outliers in age
+df <- df %>% mutate(age=replace(age, age == 350, 35))  #most probably just additional 0
+df <- df %>% mutate(age=replace(age, age == 220, 22)) 
+unique(df$age)
 str(df)
 df$gender <- factor(df$gender)
 str(df)
