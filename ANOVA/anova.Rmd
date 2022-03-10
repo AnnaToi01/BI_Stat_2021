@@ -1,0 +1,259 @@
+---
+title: "Lec9"
+author: "Anna Toidze"
+date: "11/13/2021"
+output: html_document
+---
+
+#Project Anova
+
+We examine the data about patients treating with different kinds of drugs and their influence on the numbe rof days the patients stay in the hospital.
+
+
+Let's see how our data looks like:
+```{bash}
+ls Data/
+```
+**1.** So we have 20 .csv files, that have to unite in one table. Let's load the needed libraries:
+```{r message=FALSE}
+packages <- c("ggplot2", "dplyr", "ggExtra", "cowplot", "car", "broomExtra", "purrr", "stringr", "data.table", "gridExtra")
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
+
+
+```
+Uniting all data in one datafram *df*:
+```{r, warning=FALSE}
+uniting_data <- function(path, extension = "csv"){
+  pattern <- paste0("*.", extension)
+  myfiles <-  paste0(path, list.files(path, pattern=pattern, all.files=FALSE,
+           full.names=FALSE))
+  rbindlist(lapply(myfiles, function(x){read.csv(x, stringsAsFactors = F, sep=',')}))
+}
+path <- "Data/"
+
+df <- uniting_data(path)
+
+
+```
+**2**. Tidying up data, substituting incorrect values:
+```{r, warning = FALSE}
+unique(df$age)
+df <- df %>% mutate(age=replace(age, age == "thirty-one", 31)) 
+df$age <- as.numeric(df$age)
+unique(df$age) # We have outliers in age
+df <- df %>% mutate(age=replace(age, age == 350, 35))  #most probably just additional 0
+df <- df %>% mutate(age=replace(age, age == 220, 22)) 
+unique(df$age)
+str(df)
+df$gender <- factor(df$gender)
+str(df)
+unique(df$gender)
+df <- df %>% mutate(gender=replace(gender, gender == "malle", "male")) 
+unique(df$drug_type)
+unique(df$X)
+unique(df$days_in_hospital)
+
+```
+Everything else seems to be fine.
+**3. ** Calculate mean and standard deviation of the number of days, required to leave the hospital.
+
+```{r}
+df %>% select(days_in_hospital) %>% 
+  summarise(mean = mean(days_in_hospital), 
+            stdev = sd(days_in_hospital))
+
+```
+**4. ** Number of days spent in hospital, depending on sex:
+```{r}
+ggplot(df, aes(y = days_in_hospital)) +
+  geom_boxplot()+
+  labs(title= "Days spent in hospital", 
+       subtitle = "Dependent on Sex")+
+  ylab("Days spent in hospital")+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  scale_y_continuous(limits = c(round(min(df$days_in_hospital, na.rm = T)),
+ round(max(df$days_in_hospital, na.rm = T))), breaks = seq(round(min(df$days_in_hospital, na.rm = T))
+, round(max(df$days_in_hospital, na.rm = T))
+, round((max(df$days_in_hospital, na.rm = T)-min(df$days_in_hospital, na.rm = T))/10)
+)) +
+  facet_grid(. ~ gender)
+
+ggplot(df, aes(y = days_in_hospital, fill = gender)) +
+  geom_boxplot()+
+  labs(title= "Days spent in hospital", 
+       subtitle = "Dependent on Sex")+
+  ylab("Days spent in hospital")+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  scale_y_continuous(limits = c(round(min(df$days_in_hospital, na.rm = T)),
+ round(max(df$days_in_hospital, na.rm = T))), breaks = seq(round(min(df$days_in_hospital, na.rm = T))
+, round(max(df$days_in_hospital, na.rm = T))
+, round((max(df$days_in_hospital, na.rm = T)-min(df$days_in_hospital, na.rm = T))/10)
+))
+
+```
+**5. ** Is there a significant difference between days spent in hospital for women, which were taking placebo or  drug type 2.
+```{r}
+#Checking if normally distributed
+wdf_plac <- subset(df, gender == "female" & drug_type == "Placebo")
+plac <- ggplot(wdf_plac, aes(days_in_hospital))+
+  geom_density(fill = "red", alpha = 0.5)+
+  scale_x_continuous(name = "Days spent in Hospital", 
+                     limits = c(round(min(df$days_in_hospital, na.rm = T)),
+ round(max(df$days_in_hospital, na.rm = T))), breaks = seq(round(min(df$days_in_hospital, na.rm = T))
+, round(max(df$days_in_hospital, na.rm = T))
+, round((max(df$days_in_hospital, na.rm = T)-min(df$days_in_hospital, na.rm = T))/10)
+)) +
+  theme_bw()
+wdf_2 <- subset(df, gender == "female" & drug_type == "New_type_2")
+type2 <- ggplot(wdf_2, aes(days_in_hospital))+
+  geom_density(fill = "blue", alpha = 0.5)+
+  scale_x_continuous(name = "Days spent in Hospital", 
+                     limits = c(round(min(df$days_in_hospital, na.rm = T)),
+ round(max(df$days_in_hospital, na.rm = T))), breaks = seq(round(min(df$days_in_hospital, na.rm = T))
+, round(max(df$days_in_hospital, na.rm = T))
+, round((max(df$days_in_hospital, na.rm = T)-min(df$days_in_hospital, na.rm = T))/10)
+)) +
+  theme_bw()
+
+plot_grid(plac, type2)
+
+#Plot
+
+qqPlot(wdf_plac$days_in_hospital) #normally distributed
+qqPlot(wdf_2$days_in_hospital) #not normally distributed
+
+#Shapiro test for normal distribution
+shapiro.test(wdf_plac$days_in_hospital) #normally distributed
+shapiro.test(wdf_2$days_in_hospital) #not normally distributed
+
+
+```
+As we can see, our data is not normally distributed (specifically days spent in hospital for females receiving drug type 2) and the number of observations is not really that big. It follows that t-test cannot be used, but instead Mann-Whitney U-test:
+```{r}
+#Mann-Whitney U test
+wlic <- wilcox.test(wdf_plac$days_in_hospital, wdf_2$days_in_hospital)
+wlic <- tidy(wlic)
+names(wlic) <- c("Statistic", "P Value", "Method", "Alternative Hypothesis")
+wlic
+
+```
+Description as in article:
+Days spent in hospital of females receiving place and drug of type 2 were compared. As the sample size was quite small and the days spent in hospital, Mann-Whitney test was run with test statistic equal to `r wlic$"Statistic"` and p-Value of `r wlic$"P Value"`. It can be concluded, that the days spent in hospital significantly defer from each other.
+**6. **Is there a difference in the number of days spent in the hospital between taking a drug and placebo?
+```{r}
+ggplot(df, aes(y = days_in_hospital, fill = drug_type))+
+  geom_boxplot()+
+    labs(title= "Days spent in hospital", 
+       subtitle = "Dependent on drug type")+
+  ylab("Days spent in hospital")+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  scale_y_continuous(limits = c(round(min(df$days_in_hospital, na.rm = T)),
+ round(max(df$days_in_hospital, na.rm = T))), breaks = seq(round(min(df$days_in_hospital, na.rm = T))
+, round(max(df$days_in_hospital, na.rm = T))
+, round((max(df$days_in_hospital, na.rm = T)-min(df$days_in_hospital, na.rm = T))/10)
+))+
+  scale_fill_discrete(name = "Drug type")+
+  theme_bw()
+
+
+```
+
+There doesn't really seem to be much difference, though let's check with one-way anova. Null hypothesis - the means of th different groups are the same. Alternative hypothesis - at least one sample mean is not equal to others. Conditions:
+
+1. Independent and random observations from factors
+2. Data for each factor normally distributed
+3. They have common variance
+  
+Checking for **normal distribution**:
+```{r}
+
+ggplot(df, aes(days_in_hospital, fill = drug_type))+
+  geom_density(alpha = 0.5)+
+  facet_grid(. ~ drug_type)
+shapiro.test(df[drug_type=="Placebo", ]$days_in_hospital) #normally distributed
+shapiro.test(df[drug_type=="Old_type", ]$days_in_hospital) #normally distributed
+shapiro.test(df[drug_type=="New_type_1", ]$days_in_hospital) #not normally distributed :(
+shapiro.test(df[drug_type=="New_type_2", ]$days_in_hospital) #normally distributed
+
+```
+Based on the Shapiro-Wilk test data for each factor is normally distributed, except for new drug of type 1. However, p value is  `r shapiro.test(df[drug_type=="New_type_1", ]$days_in_hospital)$p.value`, and not that low, and based on the density distribution - it is not bimodal, so it still okay to use the Anova test.
+
+Checking for common variance with **Levene's test for homogeneity of variance**:
+```{r}
+lev <- leveneTest(days_in_hospital ~ drug_type, df)
+lev$`Pr(>F)`[1]
+```
+Based on the Levene's test (p_value = `r lev$"Pr(>F)"[1]`), we are not allowed to do the ANOVA-test, because there is statistically different variance across groups.
+
+Let's continue:
+
+```{r}
+df %>% group_by(drug_type) %>%
+  summarise(
+    count = n(),
+    mean = mean(days_in_hospital, na.rm = TRUE),
+    sd = sd(days_in_hospital, na.rm = TRUE)
+  )
+table(df$drug_type)
+```
+The count of data is same. Let's take at variances (code adapted from lecture):
+```{r}
+df$drug_type <- factor(df$drug_type)
+total <- ggplot(df, aes(x = drug_type, y = days_in_hospital))+ 
+         geom_linerange(aes(x=drug_type, ymax=days_in_hospital, ymin = mean(df$days_in_hospital)), size = 1,color = "grey", position = position_jitter(width = 0.1, seed = 1L))+
+  geom_hline(yintercept = mean(df$days_in_hospital))+ 
+  geom_point(position = position_jitter(width = 0.1, seed = 1L)) +ggtitle("Total \n variance")+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+gr_mean<-df %>% group_by(drug_type) %>% summarise(mean = mean(days_in_hospital))
+
+two_pic<-right_join(x = df, y = gr_mean)
+
+hline <- data.frame(drug_type=levels(df$drug_type), v=gr_mean$mean)
+
+
+resid<-ggplot(two_pic, aes(x = drug_type, y = days_in_hospital)) + geom_linerange(aes(x = drug_type, ymax = days_in_hospital, ymin = mean), size = 1,color = "green", position = position_jitter(width = 0.1, seed = 1L)) +geom_point(position = position_jitter(width = 0.1, seed = 1L)) +geom_point(data=hline, aes(drug_type, v), shape=95, size=15) +ggtitle("Variance \n within")+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+factor <- ggplot() +  geom_linerange(data = gr_mean, aes(x= drug_type, ymax = mean, ymin = mean(df$days_in_hospital)), color = "blue", size = 2)+geom_point(data = two_pic, aes(x = drug_type, y = days_in_hospital), position = position_jitter(width = 0.2, seed = 1L)) +geom_point(data=hline, aes(drug_type, v), shape=95, size=15) +geom_hline(yintercept = mean(df$days_in_hospital)) + ggtitle("Variance \n between")+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+grid.arrange(total, factor, resid, nrow = 1)
+
+
+```
+
+After visualizing the variances, we can use the F-test of ANOVA:
+
+```{r}
+res.aov <- aov(days_in_hospital ~ drug_type, data = df)
+summary(res.aov)
+
+plot(res.aov, 1)
+
+```
+
+Based on this there is no significant difference between the days spent in the hospital in groups taking different types of drugs.
+
+ANOVA calculation by another function, take linear model:
+```{r}
+mod_df <- lm(days_in_hospital ~ drug_type, data = df)
+summary(mod_df)
+```
+```{r}
+df_anova <- Anova(mod_df)
+df_anova
+```
+The days that one stays in the hospital is not affected by the drug type taken (F = `r df_anova$"F value"[1]`, p_value = `r df_anova$"Pr(>F)"[1]`, df_1 = `r df_anova$Df[1]`, df_2 = `r df_anova$Df[2]`). The result might be skewed, as some of the conditions required in order to perform the ANOVA test were not fulfilled. The ANOVA test is robust and not be affected as much, however, further statistical analysis could be necessary.
