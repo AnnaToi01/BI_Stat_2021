@@ -1,0 +1,749 @@
+---
+title: "Mice"
+author: "Anna Toidze"
+date: "04/25/2022"
+output:
+    html_document:
+      toc: true
+      toc_depth: 3
+      toc_float: true
+---
+
+# Which proteins are characteristic for mice with Down's syndrome?
+
+The data file `Data_Cortex_Nuclear.xls` is assumed to be in a `data` folder located in the parent directory.
+
+First let's load the necessary libraries:
+```{r message=FALSE, include=FALSE}
+packages <- c("ggplot2", "dplyr", "ggExtra", "cowplot", "car", "broomExtra", "purrr", "stringr", "readxl", "tidyr", "gridExtra", "multcomp", "psych", "caret", "vegan", "Metrics", "caTools", "reshape2", "corrplot", "stats", "plotly", "BiocManager", "pls")
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
+
+if (!require("limma"))
+  BiocManager::install("limma")
+library(limma)
+```
+Loading data:
+```{r message=FALSE}
+path_to_data <- "../data/Data_Cortex_Nuclear.xls"
+mice_df <- read_excel(path_to_data)
+```
+
+# 1. Describing the dataset
+
+Structure of the dataset:
+```{r}
+str(mice_df)
+```
+
+Shape of the dataset:
+```{r}
+dim(mice_df)
+```
+The dataset has `dim(mice_df)[1]` rows and `dim(mice_df)[2]` columns.
+
+## 1.1 How many mice were there in the experiment?
+We have to take a look at mouse IDs - mice with the same number before underscore are the same.
+```{r}
+length(unique(sapply(strsplit(mice_df$MouseID, "_"), "[[", 1)))
+```
+Another solution:
+```{r}
+num_mice <- mice_df %>% 
+  separate(MouseID, c("MouseID", "NumberExp")) %>% 
+  summarize(n = length(unique(MouseID)))
+num_mice[[1]]
+```
+
+## 1.2 How many classes of mice are there?
+Number of classes:
+```{r}
+length(unique(mice_df$class))
+```
+
+Classes:
+
+* c-CS-s: control mice, stimulated to learn, injected with saline (9 mice)
+* c-CS-m: control mice, stimulated to learn, injected with memantine (10 mice)
+* c-SC-s: control mice, not stimulated to learn, injected with saline (9 mice)
+* c-SC-m: control mice, not stimulated to learn, injected with memantine (10 mice)
+
+* t-CS-s: trisomy mice, stimulated to learn, injected with saline (7 mice)
+* t-CS-m: trisomy mice, stimulated to learn, injected with memantine (9 mice)
+* t-SC-s: trisomy mice, not stimulated to learn, injected with saline (9 mice)
+* t-SC-m: trisomy mice, not stimulated to learn, injected with memantine (9 mice)
+
+
+## 1.3 How balanced are these classes?
+Table with the number of measurements for each class:
+```{r}
+table(mice_df$class)
+```
+As we can see, the numbers range from 105 to 150. Not perfectly balanced.
+
+Let's see how many mice in each class:
+```{r}
+sep_mice_df <- mice_df %>% 
+  separate(MouseID, c("MouseID", "NumberExp")) %>%
+  group_by(class) %>% 
+  summarise(n = length(unique(MouseID)))
+sep_mice_df
+```
+
+## 1.4 Number of full observations
+```{r}
+sum(complete.cases(mice_df))
+```
+Dropping all columns with NA:
+```{r}
+complete_mice_df <- mice_df %>% 
+  separate(MouseID, c("MouseID", "NumberExp")) %>%
+  drop_na()
+  
+table(complete_mice_df$class)
+```
+Not really that much data left afterwards - and there are NAs only for some proteins. Therefore, not dropping the NA rows.
+
+# 2. Is there any difference in the level of production of BDNF_N depending on the class?
+
+Let's check with One-Way Anova. Null hypothesis - the means of the different groups are the same. Alternative hypothesis - at least one sample mean is not equal to others. 
+
+Let's take a look at the data, whether it is normally distributed:
+
+```{r warning=F}
+#Checking if normally distributed
+bdnf_n_den_plot <- ggplot(mice_df, aes(BDNF_N, fill=class))+
+  geom_density(alpha = 0.5)+
+  scale_x_continuous(name = "BDNF_N") +
+  facet_grid(class ~ .) + 
+  theme_bw()
+
+bdnf_n_den_plot
+
+bdnf_n_violin_plot <- ggplot(mice_df, aes(x=class, y=BDNF_N, fill=class))+
+  geom_violin(alpha = 0.5)+
+  geom_boxplot(width=0.1, color='black', fill='white') + 
+  theme_bw()
+
+bdnf_n_violin_plot
+
+#Plot
+
+classes <- unique(mice_df$class)
+
+for (c in classes){
+  qqPlot(subset(mice_df, class == c)$BDNF_N, ylab = c)
+} # Every class seems to be normally distributed
+
+
+#Shapiro test for normal distribution
+for (c in classes){
+  print(c)
+  print(shapiro.test(subset(mice_df, class == c)$BDNF_N))
+} # Not normally distributed
+
+
+
+```
+Let's try maybe removing outliers using the 25 \% and 75 \% quantiles and interquartile range. 
+```{r}
+list_quant_df <- list()
+
+for (c in classes){
+  c_mice_df <- subset(mice_df, class == c)
+  quantiles <- quantile(c_mice_df$BDNF_N, na.rm = T, probs = c(0.25, 0.75))
+  iqr <- IQR(c_mice_df$BDNF_N, na.rm = T)
+  lower <- quantiles[1] - 1.5 * iqr
+  higher <- quantiles[2] + 1.5 * iqr
+  
+  c_quant_mice_df <- subset(c_mice_df, BDNF_N > lower & BDNF_N < higher)
+  
+  list_quant_df[[c]] <- c_quant_mice_df
+  
+  qqPlot(subset(mice_df, class == c)$BDNF_N, ylab = c)
+  print(c)
+  print(shapiro.test(c_quant_mice_df$BDNF_N))
+}
+
+quant_mice_df <- bind_rows(list_quant_df, .id = "column_label")
+
+ggplot(quant_mice_df, aes(BDNF_N, fill=class))+
+  geom_density(alpha = 0.5)+
+  scale_x_continuous(name = "BDNF_N") +
+  facet_grid(class ~ .) + 
+  theme_bw()
+
+bdnf_n_violin_plot <- ggplot(quant_mice_df, aes(x=class, y=BDNF_N, fill=class))+
+  geom_violin(alpha = 0.5)+
+  geom_boxplot(width=0.1, color='black', fill='white') + 
+  theme_bw()
+
+bdnf_n_violin_plot
+```
+
+Okay, after the filtering step - there are still some cases where the distribution is not normal according to the Shapiro-Wilk test, but the data seems to be okay in general.
+
+
+Let's take a look at the data structure:
+
+```{r}
+# Original data
+mice_df %>% 
+  group_by(class) %>%
+  summarise(
+    count = n(),
+    mean = mean(BDNF_N, na.rm = TRUE),
+    sd = sd(BDNF_N, na.rm = TRUE)
+  )
+
+# Quantile-filtered
+quant_mice_df %>% 
+  group_by(class) %>%
+  summarise(
+    count = n(),
+    mean = mean(BDNF_N, na.rm = TRUE),
+    sd = sd(BDNF_N, na.rm = TRUE)
+  )
+
+```
+
+ Let's take a look at variances:
+ 
+```{r warning=F, message=F}
+# Original data
+mice_df$class <- factor(mice_df$class)
+total <- ggplot(mice_df, aes(x = class, y = BDNF_N))+ 
+         geom_linerange(aes(x=class, ymax=BDNF_N, ymin = mean(mice_df$BDNF_N, na.rm = T)), size = 1,color = "grey", position = position_jitter(width = 0.1, seed = 1L))+
+  geom_hline(yintercept = mean(mice_df$BDNF_N, na.rm = T))+ 
+  geom_point(position = position_jitter(width = 0.1, seed = 1L), size=0.2) +
+  ggtitle("Total \n variance")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+gr_mean<-mice_df %>% 
+  group_by(class) %>% 
+  summarise(mean = mean(BDNF_N, na.rm = T))
+
+two_pic<-right_join(x = mice_df, y = gr_mean)
+
+hline <- data.frame(class=levels(mice_df$class), v=gr_mean$mean)
+
+
+resid<-ggplot(two_pic, aes(x = class, y = BDNF_N)) + 
+  geom_linerange(aes(x = class, ymax = BDNF_N, ymin = mean), size = 1,color = "green", position = position_jitter(width = 0.1, seed = 1L)) +
+  geom_point(position = position_jitter(width = 0.1, seed = 1L), size=0.2)+
+  geom_point(data=hline, aes(class, v), shape=95, size=15) +
+  ggtitle("Variance \n within")+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+factor <- ggplot() +  
+  geom_linerange(data = gr_mean, aes(x= class, ymax = mean, ymin = mean(mice_df$BDNF_N, na.rm = T)), color = "blue", size = 2)+
+  geom_point(data = two_pic, aes(x = class, y = BDNF_N), position = position_jitter(width = 0.2, seed = 1L), size=0.2) +
+  geom_point(data=hline, aes(class, v), shape=95, size=15) +
+  geom_hline(yintercept = mean(mice_df$BDNF_N, na.rm = T)) + 
+  ggtitle("Variance \n between")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+grid.arrange(total, factor, resid, nrow = 1)
+
+# Quantile-filtered
+quant_mice_df$class <- factor(quant_mice_df$class)
+total <- ggplot(quant_mice_df, aes(x = class, y = BDNF_N))+
+         geom_linerange(aes(x=class, ymax=BDNF_N, ymin = mean(quant_mice_df$BDNF_N)), size = 1,color = "grey", position = position_jitter(width = 0.1, seed = 1L))+
+  geom_hline(yintercept = mean(quant_mice_df$BDNF_N))+
+  geom_point(position = position_jitter(width = 0.1, seed = 1L), size=0.2) +
+  ggtitle("Total \n variance")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+gr_mean<-quant_mice_df %>% group_by(class) %>% summarise(mean = mean(BDNF_N))
+
+two_pic<-right_join(x = quant_mice_df, y = gr_mean)
+
+hline <- data.frame(class=levels(quant_mice_df$class), v=gr_mean$mean)
+
+
+resid<-ggplot(two_pic, aes(x = class, y = BDNF_N)) +
+  geom_linerange(aes(x = class, ymax = BDNF_N, ymin = mean), size = 1,color = "green", position = position_jitter(width = 0.1, seed = 1L)) +
+  geom_point(position = position_jitter(width = 0.1, seed = 1L), size=0.2)+
+  geom_point(data=hline, aes(class, v), shape=95, size=15) +
+  ggtitle("Variance \n within")+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+factor <- ggplot() +
+  geom_linerange(data = gr_mean, aes(x= class, ymax = mean, ymin = mean(quant_mice_df$BDNF_N)), color = "blue", size = 2)+
+  geom_point(data = two_pic, aes(x = class, y = BDNF_N), position = position_jitter(width = 0.2, seed = 1L), size=0.2) +
+  geom_point(data=hline, aes(class, v), shape=95, size=15) +
+  geom_hline(yintercept = mean(quant_mice_df$BDNF_N)) +
+  ggtitle("Variance \n between")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+grid.arrange(total, factor, resid, nrow = 1)
+```
+
+After visualizing the variances, we can use the F-test of ANOVA:
+
+```{r}
+# Original data
+or_res.aov <- aov(BDNF_N ~ class, data = mice_df)
+or_aov <- summary(or_res.aov)
+
+# Quantile-fitted
+quant_res.aov <- aov(BDNF_N ~ class, data = quant_mice_df)
+quant_aov <- summary(quant_res.aov)
+
+
+```
+
+Based on this there is a significant difference between the classes in the production of BDNF_N (whether the outliers are removed or not) with p-value of `or_aov[[1]][["Pr(>F)"]]` for original data and `quant_rov[[1]][["Pr(>F)"]]` for the .
+
+Other way to do ANOVA test. First we build a linear model and then perform the ANOVA test:
+```{r}
+# Original data
+mod_mice <- lm(BDNF_N ~ class, data = mice_df)
+summary(mod_mice)
+mice_anova <- Anova(mod_mice)
+mice_anova
+
+# Quantile-fitted
+quant_mod_mice <- lm(BDNF_N ~ class, data = quant_mice_df)
+summary(quant_mod_mice)
+quant_mice_anova <- Anova(mod_mice)
+quant_mice_anova
+```
+**The production of BDNF_N protein significantly depends on the class in the experiment (F =`r mice_anova[[3]][1]` , p_value = `r mice_anova[[4]][1]`, df_1 = `r mice_anova[[2]][1]`, df_2 = `r mice_anova[[2]][2]`).**
+
+ANOVA asssumptions:
+
+* normal distribution of residuals
+* homogeneity of variance of residuals
+* no collinearity
+* independence of the observations
+
+Let's check for outliers:
+```{r}
+mod_diag <- fortify(mod_mice)
+
+
+ggplot(mod_diag, aes(x = 1:nrow(mod_diag), y = .cooksd)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Cook's distance") +
+  xlab("Number of the observation") +
+  ylab("Cook's D")
+
+
+quant_mod_diag <- fortify(quant_mod_mice)
+
+
+ggplot(quant_mod_diag, aes(x = 1:nrow(quant_mod_diag), y = .cooksd)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Cook's distance") +
+  xlab("Number of the observation") +
+  ylab("Cook's D")
+```
+
+For original data there are some relatively high Cook's D values, but they're still less than 0.2, so not so high. For quantile data the distances are very low. 
+
+```{r}
+ggplot(mod_diag, aes(x = class, y = .stdresid, fill=class)) + 
+  geom_violin(alpha=0.5) +
+  geom_boxplot(width=0.1, color='black', fill='white') + 
+  ggtitle("Graph of residuals") +
+  theme_bw()
+
+
+
+ggplot(quant_mod_diag, aes(x = class, y = .stdresid, fill=class)) + 
+  geom_violin(alpha=0.5) +
+  geom_boxplot(width=0.1, color='black', fill='white') + 
+  ggtitle("Graph of residuals") + 
+  theme_bw()
+```
+
+Testing normal distribution of the residuals:
+
+```{r}
+# QQPlot
+qqPlot(mod_mice$residuals, id = FALSE, main = "Quantile plot of residuals")
+
+# Shapiro test for normal distribution
+shapiro.test(mod_mice$residuals)
+```
+
+Based on the Shapiro=Wilk test the residuals are not normally distributed. 
+
+Checking for common variance with residuals vesus fits plot and  **Levene's test for homogeneity of variance**:
+```{r warning=F}
+# Checking the homogeneity of variance of original
+plot(or_res.aov, 1)
+
+# Checking the homogeneity of variance of quantile
+plot(quant_res.aov, 1)
+
+
+# Original data
+lev <- leveneTest(BDNF_N ~ class, mice_df)
+lev$`Pr(>F)`[1]
+
+
+# Quantile-filtered 
+lev <- leveneTest(BDNF_N ~ class, quant_mice_df)
+lev$`Pr(>F)`[1]
+```
+Based on Levene's test the groups (independent of whether the outliers are removed) don't have the same variances - this actually breaks one of the conditions for the ANOVA test.
+
+Let's try Welch one-way test tat does not make the assumption of equal variances:
+```{r}
+mice_welch <- oneway.test(BDNF_N ~ class, data = mice_df)
+```
+Based on this **the production of BDNF_N protein still significantly depends on the class in the experiment (F =`r mice_welch[[1]][1]` , p_value = `r mice_welch[[3]][1]`, df_1 = `r mice_welch[[2]][1]`, df_2 = `r mice_welch[[2]][2]`).**
+
+Post-hoc test of Tukey HSD:
+
+```{r}
+post_hoc <- glht(mod_mice, linfct = mcp(class = "Tukey"))
+result<-summary(post_hoc)
+result
+```
+Based on the table above, there are some significant differences between classes in production of BDNF_N (marked with asterisks). 
+
+The level of production of BDNF_N in following classes is significantly **lower** than the level of production in **c-CS-m**:
+
+* c-SC-m (p-value `r result$test$pvalues[2]`)
+* c-SC-s (p-value `r result$test$pvalues[3]`)
+* t-CS-m (p-value `r result$test$pvalues[4]`)
+* t-CS-s (p-value `r result$test$pvalues[5]`)
+* t-SC-m (p-value `r result$test$pvalues[6]`)
+
+The level of production of BDNF_N in following classes is significantly **lower** than the level of production in **c-CS-m**:
+
+* c-SC-m (p-value `r result$test$pvalues[8]`)
+* c-SC-s (p-value `r result$test$pvalues[9]`)
+* t-CS-m (p-value `r result$test$pvalues[10]`)
+* t-CS-s (p-value `r result$test$pvalues[11]`)
+* t-SC-m (p-value `r result$test$pvalues[12]`)
+
+The level of production of BDNF_N in following classes is significantly **higher** than the level of production in **c-SC-m**:
+
+* c-SC-s (p-value `r result$test$pvalues[14]`)
+* t-CS-m (p-value `r result$test$pvalues[15]`)
+* t-SC-m (p-value `r result$test$pvalues[17]`)
+* t-CS-m (p-value `r result$test$pvalues[18]`)
+
+The level of production of BDNF_N in following classes is significantly **higher** than the level of production in **t-CS-s**:
+
+* t-SC-s (p-value `r result$test$pvalues[27]`)
+
+# 3. Build a linear model that predicts the level of production of ERBB4_N based on the production of other proteins in the experiment
+
+### EDA
+NAs for each column and row:
+```{r warning=F}
+# Columns
+col_na_counts <- data.frame(colSums(is.na(mice_df)))
+col_na_counts[order(col_na_counts), ]
+# As we can see there are some columns with a lot of NA values. I will remove the ones with more than 20 NAs
+# Rows
+row_na_counts <- data.frame(rowSums(is.na(mice_df)))
+row_na_counts[order(row_na_counts), ][900:1080]
+# There are 3 rows with 43 NAs, so I will remove those
+
+less_na_mice_df <- mice_df[rowSums(is.na(mice_df)) <= 5 , colSums(is.na(mice_df)) <= 5]
+
+```
+Now we take only numeric values:
+```{r}
+less_na_mice_df <- as.data.frame(select_if(less_na_mice_df, is.numeric))
+```
+
+
+As we can see, there are some columns that 
+
+### Train-Test split
+Let's try splitting the data into training and test:
+
+```{r}
+sample <- sample.split(less_na_mice_df, SplitRatio = 0.8)
+training_data <- subset(less_na_mice_df, sample == TRUE)
+test_data <- subset(less_na_mice_df, sample == FALSE)
+```
+
+
+Normalizing the data:
+```{r}
+# var_training_data <- training_data[, c(-17, -18)]
+# var_test_data <- test_data[, c(-17, -18)]
+var_training_data <- dplyr::select(training_data, -ERBB4_N)
+var_test_data <- dplyr::select(test_data, -ERBB4_N)
+
+normParam <- caret::preProcess(var_training_data, na.remove = TRUE)
+
+norm_training_data <- predict(normParam, var_training_data)
+norm_test_data <- predict(normParam, var_test_data)
+psych::describe(norm_training_data)
+psych::describe(norm_test_data)
+```
+
+Taking a look at the heatmap, correlation of the variables:
+
+```{r}
+# Visualization of correlation matrix
+cor_matr <- cor(norm_training_data)
+melted_cormat <- melt(cor_matr, )
+ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=5),
+        axis.text.y = element_text(size=5)) 
+
+```
+
+
+
+Filtering off columns that are highly correlated (>= 0.9) with each other
+```{r}
+diag(cor_matr) <- 0
+threshold <- 0.9
+# Names of columns with high correlation
+colnames(cor_matr[apply(abs(cor_matr) >= threshold, 1, any), apply(abs(cor_matr) >= threshold, 1, any)])
+
+# Filtering off columns with high correlation, for training and test data
+filt_norm_training_data <-  norm_training_data[,                      -which(names(norm_training_data) %in% colnames(cor_matr[apply(abs(cor_matr) >= threshold, 1, any), apply(abs(cor_matr) >= threshold, 1, any)]))]
+
+filt_norm_test_data <-  norm_test_data[,                      -which(names(norm_test_data) %in% colnames(cor_matr[apply(abs(cor_matr) >= threshold, 1, any), apply(abs(cor_matr) >= threshold, 1, any)]))]
+
+# Visualization of correlation matrix
+cor_matr <- cor(filt_norm_training_data)
+melted_cormat <- melt(cor_matr, )
+ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=5),
+        axis.text.y = element_text(size=5)) 
+```
+
+```{r}
+final_training_data <- cbind(filt_norm_training_data,  dplyr::select(training_data, ERBB4_N))
+# final_test_data <- cbind(filt_norm_test_data,  dplyr::select(test_data, ERBB4_N))
+
+simple_model <- lm(ERBB4_N ~ ., data = final_training_data)
+summary(simple_model)
+
+y_pred <- predict(simple_model, filt_norm_test_data)
+
+```
+Linear model with multiple R$^2$ of `r summary(simple_model)[8]` and adjusted R$^2$ of `r summary(simple_model)[9]`.
+## 3.1 Diagnostics of the linear model
+
+
+```{r}
+plot(simple_model)
+
+actuals_preds <- data.frame(cbind(actuals=test_data$ERBB4_N, predicteds=y_pred))
+
+# Very low correlation between the predicted and the actual data
+correlation_accuracy <- cor(actuals_preds) 
+correlation_accuracy
+
+# MAE and MSE in comparison to data
+mae <- mae(final_training_data$ERBB4_N, predict(simple_model))
+mse <- mse(final_training_data$ERBB4_N, predict(simple_model))
+
+```
+
+In general, at least correlation between the predicted and the actual data relatively high -  `r correlation_accuracy[1, 2]`. MAE is equal to `r mae` and MSE to `r mse`.
+
+1. Residuals vs Fitted. Used to check the linear relationship assumptions. We have a horizontal line, which indicates a linear relationship. 
+2. Normal Q-Q. Residuals are normally distributed, only tails are little bit bigger - but it's okay.
+3. Scale-Location (or Spread-Location). The homogeneity of variance is observed - heteroscedasticity problem.
+4. Residuals vs Leverage. We have 3 extreme points. However, none of them exceed 3 standard deviations. Leverage calculate by formula $\frac{2(p+1)}{n}$ = `r 2 * (ncol(filt_norm_training_data) - 1 + 1) / nrow(filt_norm_training_data)`, where p is the number of predictors and n is the number of observations. We have some high leverage points.
+ 
+ 
+## 3.2 Is the model good?
+
+This model is not good - we have only a couple of significant predictors. Also heteroscedasticity and high leverage was observed. 
+
+
+# 4. PCA
+
+```{r}
+# Taking a dataframe with numeric data
+less_na_mice_df <- mice_df[rowSums(is.na(mice_df)) <= 5 , colSums(is.na(mice_df)) <= 5]
+less_na_num_mice_df <- as.data.frame(select_if(less_na_mice_df, is.numeric))
+mice_pca <- rda(less_na_num_mice_df, scale = TRUE)
+head(summary(mice_pca))
+```
+## 4.1 Ordination Plot
+
+```{r}
+biplot(mice_pca, scaling = "sites", display = "sites")
+
+```
+
+## 4.2 Correlation Biplot
+```{r}
+biplot(mice_pca, scaling = "species", display = "species")
+
+```
+
+## 4.3 Scree plot
+```{r}
+screeplot(mice_pca, type = "lines", bstick = TRUE) 
+```
+
+
+How much percent does each PCA component explain.
+```{r}
+pca_summary <- summary(mice_pca)
+pca_result <- as.data.frame(pca_summary$cont)
+plot_data <- as.data.frame(t(pca_result[c("Proportion Explained"),]))
+plot_data$component <- rownames(plot_data)
+plot_data <- plot_data %>% 
+  arrange(-`Proportion Explained`) %>%
+  separate(component, c("imp", "component")) %>% 
+  mutate(component = factor(component, levels=component),
+         prop_explained = `Proportion Explained` * 100)
+
+# How much percent does each component explain
+plot_data[, c("component", "prop_explained")]
+
+# Plotting first ten
+ggplot(plot_data[1:10, ], aes(component, prop_explained)) +
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=5), 
+        panel.background = element_rect(fill = "white", colour = "grey50")) +
+  xlab("Component") +
+  ylab("Proportion explained [%]")
+```
+
+Cumulative proportion
+
+```{r}
+plot_data <- plot_data %>% 
+  mutate(cum_prop = cumsum(prop_explained))
+
+
+
+# Plotting till explained cumulative proportion > 90 %
+ggplot(plot_data[1:which(plot_data$cum_prop > 90)[1], ], aes(component, cum_prop)) +
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=5), 
+        panel.background = element_rect(fill = "white", colour = "grey50")) +
+  xlab("Component") +
+  ylab("Proportion explained [%]")
+```
+
+First 18 PCA components needed to explain more than 90 \% of data.
+
+## 4.4 Plot 3D graph
+```{r}
+prin_comp <- prcomp(less_na_num_mice_df, rank. = 3)
+
+components <- prin_comp[["x"]]
+components <- data.frame(components)
+components$PC2 <- -components$PC2
+components$PC3 <- -components$PC3
+components = cbind(components, less_na_mice_df$class)
+
+
+fig <- plot_ly(components, x = ~PC1, y = ~PC2, z = ~PC3, color = ~less_na_mice_df$class, colors = c('#636EFA','#EF553B','#00CC96') ) %>%
+  add_markers(size = 12)
+
+
+fig <- fig %>%
+  layout(
+    scene = list(bgcolor = "#e5ecf6")
+)
+
+fig
+```
+
+## 4.5 Trying linear model with PCR for ERBB4_N
+Building the 
+
+```{r}
+model <- pcr(ERBB4_N ~ ., data = final_training_data, scale=TRUE, validation="CV")
+summary(model)
+```
+
+First 3 components have very low cumulative explained variation 
+
+```{r}
+validationplot(model, val.type="RMSEP")
+validationplot(model, val.type="MSEP")
+validationplot(model, val.type="R2")
+
+```
+
+As we can see, after adding around 13 components the model does not improve that much anymore. Let's to prediction:
+
+```{r}
+y_pred <- predict(model, filt_norm_test_data, ncomp=13)
+actuals_preds <- data.frame(cbind(actuals=test_data$ERBB4_N, predicteds=y_pred))
+
+plot(model)
+
+# Very low correlation between the predicted and the actual data
+correlation_accuracy <- cor(actuals_preds) 
+correlation_accuracy
+
+# MAE and MSE in comparison to data
+mae <- mae(final_training_data$ERBB4_N, predict(model))
+mse <- mse(final_training_data$ERBB4_N, predict(model))
+
+```
+
+
+Correlation between the predicted and the actual data  -  `r correlation_accuracy[1, 2]`. MAE is equal to `r mae` and MSE to `r mse`. The model is worse than the linear model from before.
+
+# 5. Search for differentially expressed proteins
+Using library limma version 3.52.0.
+
+## Differentially expressed proteins in each class
+```{r}
+diff_exp <- less_na_mice_df
+
+# Changing variables to factors
+diff_exp$Behavior <- as.factor(diff_exp$Behavior)
+diff_exp$Treatment <- as.factor(diff_exp$Treatment)
+diff_exp$Genotype <- as.factor(diff_exp$Genotype)
+diff_exp$class <- as.factor(diff_exp$class)
+
+# Choosing only numeric columns
+diff_exp_num <- data.frame(t(select_if(diff_exp, is.numeric)))
+
+# Adding class variable
+diff_exp_class <- rbind(diff_exp_num, class=diff_exp$class)
+str(diff_exp_class)
+
+# Linear model
+
+design <- model.matrix(~ diff_exp$class)
+colnames(design) <- unique(diff_exp$class)
+# design[which(rowSums(design) > 1), 1] <- 0
+
+# Fit the model
+fit <- lmFit(diff_exp_num, design=design)
+
+# Calculate the t-statistics
+fit <- eBayes(fit)
+topTable(fit)
+```
+
+Summarizing the results and displaying the table for each protein. c-CS-m serves as a reference. 
+
+```{r}
+
+# Summarize results
+diff_results <- decideTests(fit, adjust.method = "BH", p.value = 0.05)
+
+# c-CS-m reference - summary results
+summary(diff_results)[, -1]
+diff_results <- as.data.frame(diff_results)
+
+# Take a look at which proteins are upregulated (1), downregulated (-1) or not significant (0)
+diff_results
+```
